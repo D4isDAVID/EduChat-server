@@ -1,0 +1,25 @@
+{
+  "name": "educhat-server",
+  "license": "MIT",
+  "private": true,
+  "author": "David Malchin <malchin459@gmail.com>",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "prettier --ignore-path .gitignore -c .",
+    "format": "prettier --ignore-path .gitignore -w .",
+    "build": "tsc",
+    "start": "node ."
+  },
+  "dependencies": {
+    "@prisma/client": "^5.11.0",
+    "bcrypt": "^5.1.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^20.11.30",
+    "prettier": "^3.2.5",
+    "prisma": "^5.11.0",
+    "typescript": "^5.4.3"
+  }
+}

@@ -1,0 +1,22 @@
+# Node.js packages
+node_modules/
+
+# TypeScript out dir
+dist/
+
+# Runtime data
+/prisma/database.db
+/cdn/
+
+# Environment files
+.env*
+!.env.example
+
+# IDE-related
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# OS-related
+.DS_Store

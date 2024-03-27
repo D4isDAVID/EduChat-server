@@ -1,0 +1,81 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String   @unique
+  email        String
+  passwordHash String
+  tokenHash    String
+  createdAt    DateTime @default(now())
+  flags        Int      @default(0)
+
+  followers User[] @relation("UserFollows")
+  following User[] @relation("UserFollows")
+  blockers  User[] @relation("UserBlocks")
+  blocking  User[] @relation("UserBlocks")
+
+  messages       Message[]
+  reactions      Reaction[]
+  directMessages Message[]       @relation("DirectMessages")
+}
+
+model Category {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  flags       Int     @default(0)
+
+  parentId Int?
+  parent   Category?  @relation("ParentChildren", fields: [parentId], references: [id])
+  children Category[] @relation("ParentChildren")
+
+  posts Post[]
+}
+
+model Post {
+  messageId Int     @id
+  message   Message @relation(fields: [messageId], references: [id])
+  title     String
+  flags     Int     @default(0)
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+}
+
+model Message {
+  id        Int       @id @default(autoincrement())
+  content   String
+  createdAt DateTime  @default(now())
+  editedAt  DateTime?
+  flags     Int       @default(0)
+
+  post Post?
+
+  parentId Int?
+  parent   Message?  @relation("ParentReplies", fields: [parentId], references: [id])
+  replies  Message[] @relation("ParentReplies")
+
+  authorId    Int
+  author      User  @relation(fields: [authorId], references: [id])
+  recipientId Int?
+  recipient   User? @relation("DirectMessages", fields: [recipientId], references: [id])
+
+  reactions Reaction[]
+}
+
+model Reaction {
+  id    Int    @id @default(autoincrement())
+  emoji String
+
+  userId    Int
+  user      User    @relation(fields: [userId], references: [id])
+  messageId Int
+  message   Message @relation(fields: [messageId], references: [id])
+}
