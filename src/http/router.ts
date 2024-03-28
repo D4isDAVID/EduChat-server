@@ -23,8 +23,8 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
     }
 
     const methods: Map<SupportedMethod, RouteHandler> = new Map();
-    const routes = new Map<string, Router>();
-    let paramRoute: Router | null = null;
+    const routers = new Map<string, Router>();
+    let paramRouter: Router | null = null;
 
     const files = await readdir(dirUrl, {
         encoding: 'utf-8',
@@ -37,20 +37,20 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
             const filePath = parse(fileURLToPath(fileUrl));
 
             if (file.isDirectory()) {
-                const route = await loadRoutes(fileUrl);
+                const router = await loadRoutes(fileUrl);
 
                 if (file.name.startsWith(paramPrefix)) {
-                    if (paramRoute) {
+                    if (paramRouter) {
                         throw new Error(
                             `Multiple param routes in path ${filePath.dir}.`,
                         );
                     }
 
-                    paramRoute = route;
+                    paramRouter = router;
                     return;
                 }
 
-                routes.set(dirPath.name, route);
+                routers.set(filePath.name, router);
                 return;
             }
 
@@ -97,12 +97,12 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
         const name = splitRoute.shift()!;
         const subRoute = splitRoute.join('/');
 
-        if (routes.has(name)) {
-            return routes.get(name)!(subRoute, method);
+        if (routers.has(name)) {
+            return routers.get(name)!(subRoute, method, params);
         }
 
-        if (paramRoute) {
-            return paramRoute(subRoute, method, [...params, name]);
+        if (paramRouter) {
+            return paramRouter(subRoute, method, [...params, name]);
         }
 
         return HttpStatusCode.NotFound;
