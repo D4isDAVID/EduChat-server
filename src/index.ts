@@ -8,11 +8,12 @@ import { loadRoutes } from './http/router.js';
 import { HttpStatusCode } from './http/status.js';
 import { getRequestUrl } from './http/url.js';
 
-const router = await loadRoutes(new URL('./routes/', import.meta.url));
-const listener: RequestListener = (request, response) => {
+const routesUrl = new URL('./routes/', import.meta.url);
+const router = await loadRoutes(routesUrl);
+
+const listener: RequestListener = async (request, response) => {
     if (!isSupportedMethod(request.method!)) {
-        writeStatusReply(response, HttpStatusCode.NotImplemented);
-        return;
+        return writeStatusReply(response, HttpStatusCode.NotImplemented);
     }
 
     const url = getRequestUrl(request);
@@ -24,7 +25,12 @@ const listener: RequestListener = (request, response) => {
         return;
     }
 
-    route.handler({ request, response, params: route.params });
+    try {
+        await route.handler({ request, response, params: route.params });
+    } catch (e) {
+        console.log(inspect(e));
+        writeStatusReply(response, HttpStatusCode.InternalServerError, e instanceof Error ? e.message : undefined);
+    }
 };
 
 const server = createServer(listener);

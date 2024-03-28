@@ -37,18 +37,20 @@ function internalErrorReply(
     {
         code: _code,
         status: _status,
-    }: { code?: ApiError; status?: HttpStatusCode } = {},
+        message: _message,
+    }: { code?: ApiError; status?: HttpStatusCode, message?: string | undefined } = {},
 ) {
     const code = _code ?? ApiError.Generic;
     const status =
         _status ?? apiErrorStatuses[code] ?? HttpStatusCode.InternalServerError;
+    const message = _message ?? apiErrorMessages[code] ?? httpStatusMessages[status];
 
     writeJsonReply(
         response,
         {
             code,
             status,
-            message: apiErrorMessages[code] ?? httpStatusMessages[status],
+            message,
         },
         status,
     );
@@ -57,10 +59,11 @@ function internalErrorReply(
 export function writeStatusReply(
     response: ServerResponse,
     status: HttpStatusCode,
+    message?: string,
 ) {
-    return internalErrorReply(response, { status });
+    return internalErrorReply(response, { status, message });
 }
 
-export function writeErrorReply(response: ServerResponse, code: ApiError) {
-    return internalErrorReply(response, { code });
+export function writeErrorReply(response: ServerResponse, code: ApiError, message?: string) {
+    return internalErrorReply(response, { code, message });
 }
