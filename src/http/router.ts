@@ -31,9 +31,9 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
         withFileTypes: true,
     });
 
-    Promise.all(
+    await Promise.all(
         files.map(async (file) => {
-            const fileUrl = new URL(file, dirUrl);
+            const fileUrl = new URL(file.name, dirUrl);
             const filePath = parse(fileURLToPath(fileUrl));
 
             if (file.isDirectory()) {
@@ -56,16 +56,16 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
 
             if (
                 !file.isFile() ||
-                filePath.ext !== 'js' ||
-                !isSupportedMethod(file.name)
+                filePath.ext !== '.js' ||
+                !isSupportedMethod(filePath.name)
             ) {
                 return;
             }
 
-            const handler = await import(fileURLToPath(fileUrl));
+            const handler = (await import(fileUrl.pathname)).default;
             if (typeof handler !== 'function') return;
 
-            methods.set(file.name, handler);
+            methods.set(filePath.name, handler);
         }),
     );
 
