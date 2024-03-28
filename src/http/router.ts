@@ -33,7 +33,7 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
 
     await Promise.all(
         files.map(async (file) => {
-            const fileUrl = new URL(file.name, dirUrl);
+            const fileUrl = new URL(`${file.name}${file.isDirectory() ? '/' : ''}`, dirUrl);
             const filePath = parse(fileURLToPath(fileUrl));
 
             if (file.isDirectory()) {
@@ -42,7 +42,7 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
                 if (file.name.startsWith(paramPrefix)) {
                     if (paramRoute) {
                         throw new Error(
-                            `Multiple param routes in path ${dirPath}.`,
+                            `Multiple param routes in path ${filePath.dir}.`,
                         );
                     }
 
