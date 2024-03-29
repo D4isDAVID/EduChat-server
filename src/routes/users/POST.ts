@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { ApiError } from '../../api/enums/error.js';
 import {
     createPasswordHashAndToken,
@@ -63,14 +64,15 @@ export default (async (props) => {
         data.password,
     );
 
-    const user = await prisma.user.create({
-        data: {
-            name: data.name,
-            email: data.email,
-            passwordHash,
-            token,
-        },
-    });
+    const createData: Prisma.UserCreateInput = {
+        name: data.name,
+        email: data.email,
+        passwordHash,
+        token,
+    };
+    if (data.student) createData.student = data.student;
+    if (data.teacher) createData.teacher = data.teacher;
+    const user = await prisma.user.create({ data: createData });
 
     response.setHeader('Access-Control-Expose-Headers', 'authorization');
     response.setHeader('Authorization', token);

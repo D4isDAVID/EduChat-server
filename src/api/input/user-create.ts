@@ -18,8 +18,8 @@ export function isUserCreateObject(obj: unknown): obj is UserCreateObject {
         typeof obj.email === 'string' &&
         'password' in obj &&
         typeof obj.password === 'string' &&
-        (!('student' in obj) || typeof obj.student !== 'boolean') &&
-        (!('teacher' in obj) || typeof obj.teacher !== 'boolean')
+        (!('student' in obj) || typeof obj.student === 'boolean') &&
+        (!('teacher' in obj) || typeof obj.teacher === 'boolean')
     );
 }
 
