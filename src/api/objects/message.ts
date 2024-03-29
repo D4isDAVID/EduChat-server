@@ -7,7 +7,8 @@ export type MessageObject = {
     readonly content: string;
     readonly createdAt: string;
     readonly editedAt: string | null;
-    readonly flags: number;
+    readonly pinned: boolean;
+    readonly hidden: boolean;
 
     readonly author: UserObject;
 };
@@ -26,7 +27,8 @@ export async function createMessageObject(
         editedAt: message.editedAt
             ? new Date(message.editedAt).toISOString()
             : null,
-        flags: message.flags,
+        pinned: message.pinned,
+        hidden: message.hidden,
 
         author: await createUserObject(author),
     };

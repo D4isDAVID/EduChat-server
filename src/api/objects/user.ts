@@ -4,7 +4,9 @@ export type UserObject = {
     readonly id: number;
     readonly name: string;
     readonly createdAt: string;
-    readonly flags: number;
+    readonly admin: boolean;
+    readonly student: boolean;
+    readonly teacher: boolean;
 };
 
 export async function createUserObject(user: User): Promise<UserObject> {
@@ -12,7 +14,9 @@ export async function createUserObject(user: User): Promise<UserObject> {
         id: user.id,
         name: user.name,
         createdAt: new Date(user.createdAt).toISOString(),
-        flags: user.flags,
+        admin: user.admin,
+        student: user.student,
+        teacher: user.teacher,
     };
 }
 

@@ -4,7 +4,8 @@ export type CategoryObject = {
     readonly id: number;
     readonly name: string;
     readonly description: string | null;
-    readonly flags: number;
+    readonly pinned: boolean;
+    readonly locked: boolean;
 };
 
 export async function createCategoryObject(
@@ -14,7 +15,8 @@ export async function createCategoryObject(
         id: category.id,
         name: category.name,
         description: category.description,
-        flags: category.flags,
+        pinned: category.pinned,
+        locked: category.locked,
     };
 }
 

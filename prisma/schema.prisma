@@ -14,7 +14,9 @@ model User {
   passwordHash String
   token        String
   createdAt    DateTime @default(now())
-  flags        Int      @default(0)
+  admin        Boolean  @default(false)
+  student      Boolean  @default(false)
+  teacher      Boolean  @default(false)
 
   followers User[] @relation("UserFollows")
   following User[] @relation("UserFollows")
@@ -23,14 +25,15 @@ model User {
 
   messages       Message[]
   reactions      Reaction[]
-  directMessages Message[]       @relation("DirectMessages")
+  directMessages Message[]  @relation("DirectMessages")
 }
 
 model Category {
   id          Int     @id @default(autoincrement())
   name        String
   description String?
-  flags       Int     @default(0)
+  pinned      Boolean @default(false)
+  locked      Boolean @default(false)
 
   parentId Int?
   parent   Category?  @relation("ParentChildren", fields: [parentId], references: [id])
@@ -43,7 +46,8 @@ model Post {
   messageId Int     @id
   message   Message @relation(fields: [messageId], references: [id])
   title     String
-  flags     Int     @default(0)
+  pinned    Boolean @default(false)
+  locked    Boolean @default(false)
 
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id])
@@ -54,7 +58,8 @@ model Message {
   content   String
   createdAt DateTime  @default(now())
   editedAt  DateTime?
-  flags     Int       @default(0)
+  pinned    Boolean   @default(false)
+  hidden    Boolean   @default(false)
 
   post Post?
 
