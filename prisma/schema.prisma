@@ -12,7 +12,7 @@ model User {
   name         String   @unique
   email        String
   passwordHash String
-  tokenHash    String
+  token        String
   createdAt    DateTime @default(now())
   flags        Int      @default(0)
 
