@@ -35,6 +35,7 @@ const apiErrorStatuses: {
     [ApiError.BadEmailFormat]: HttpStatusCode.BadRequest,
     [ApiError.BadPasswordFormat]: HttpStatusCode.BadRequest,
     [ApiError.InvalidPassword]: HttpStatusCode.Forbidden,
+    [ApiError.InvalidToken]: HttpStatusCode.Unauthorized,
 
     [ApiError._Limitations]: null,
     [ApiError.UsernameUnavailable]: HttpStatusCode.Conflict,
@@ -59,6 +60,7 @@ const apiErrorMessages: {
     [ApiError.BadPasswordFormat]:
         'Password must contain a mix of numbers, letters and symbols.',
     [ApiError.InvalidPassword]: 'Invalid password',
+    [ApiError.InvalidToken]: 'Invalid token',
 
     [ApiError._Limitations]: null,
     [ApiError.UsernameUnavailable]: 'Username unavailable',

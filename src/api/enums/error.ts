@@ -10,6 +10,7 @@ export enum ApiError {
     BadEmailFormat,
     BadPasswordFormat,
     InvalidPassword,
+    InvalidToken,
 
     _Limitations = 3000,
     UsernameUnavailable,
