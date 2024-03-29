@@ -5,8 +5,8 @@ import { UserObject, createUserObject } from './user.js';
 export type MessageObject = {
     readonly id: number;
     readonly content: string;
-    readonly createdAt: Date;
-    readonly editedAt: Date | null;
+    readonly createdAt: string;
+    readonly editedAt: string | null;
     readonly flags: number;
 
     readonly author: UserObject;
@@ -22,8 +22,10 @@ export async function createMessageObject(
     return {
         id: message.id,
         content: message.content,
-        createdAt: new Date(message.createdAt),
-        editedAt: message.editedAt ? new Date(message.editedAt) : null,
+        createdAt: new Date(message.createdAt).toISOString(),
+        editedAt: message.editedAt
+            ? new Date(message.editedAt).toISOString()
+            : null,
         flags: message.flags,
 
         author: await createUserObject(author),

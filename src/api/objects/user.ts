@@ -3,7 +3,7 @@ import { User } from '@prisma/client';
 export type UserObject = {
     readonly id: number;
     readonly name: string;
-    readonly createdAt: Date;
+    readonly createdAt: string;
     readonly flags: number;
 };
 
@@ -11,7 +11,7 @@ export async function createUserObject(user: User): Promise<UserObject> {
     return {
         id: user.id,
         name: user.name,
-        createdAt: new Date(user.createdAt),
+        createdAt: new Date(user.createdAt).toISOString(),
         flags: user.flags,
     };
 }
