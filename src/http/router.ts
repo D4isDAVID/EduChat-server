@@ -76,7 +76,7 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
         methods.set('HEAD', (props) => methods.get('GET')!(props));
     }
 
-    if (!methods.has('OPTIONS')) {
+    if (methods.size > 0 && !methods.has('OPTIONS')) {
         methods.set('OPTIONS', ({ response }) => {
             response.setHeader('Allow', Array.from(methods.keys()).join(', '));
             writeEmptyReply(response);
@@ -90,6 +90,10 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
             .filter((s) => s !== '');
 
         if (splitRoute.length === 0) {
+            if (methods.size === 0) {
+                return HttpStatusCode.NotFound;
+            }
+
             if (!methods.has(method)) {
                 return HttpStatusCode.MethodNotAllowed;
             }
