@@ -33,7 +33,10 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
 
     await Promise.all(
         files.map(async (file) => {
-            const fileUrl = new URL(`${file.name}${file.isDirectory() ? '/' : ''}`, dirUrl);
+            const fileUrl = new URL(
+                `${file.name}${file.isDirectory() ? '/' : ''}`,
+                dirUrl,
+            );
             const filePath = parse(fileURLToPath(fileUrl));
 
             if (file.isDirectory()) {

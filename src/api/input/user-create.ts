@@ -10,8 +10,8 @@ export type UserCreateObject = {
 
 export function isUserCreateObject(obj: unknown): obj is UserCreateObject {
     return (
-        typeof obj === 'object' &&
         obj !== null &&
+        typeof obj === 'object' &&
         'name' in obj &&
         typeof obj.name === 'string' &&
         'email' in obj &&

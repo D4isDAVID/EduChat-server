@@ -76,5 +76,9 @@ export default (async (props) => {
 
     response.setHeader('Access-Control-Expose-Headers', 'authorization');
     response.setHeader('Authorization', token);
-    writeJsonReply(response, await createUserObject(user));
+    writeJsonReply(
+        response,
+        await createUserObject(user),
+        HttpStatusCode.Created,
+    );
 }) satisfies RouteHandler;

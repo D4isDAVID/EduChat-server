@@ -29,7 +29,11 @@ const listener: RequestListener = async (request, response) => {
         await route.handler({ request, response, params: route.params });
     } catch (e) {
         console.log(inspect(e));
-        writeStatusReply(response, HttpStatusCode.InternalServerError, e instanceof Error ? e.message : undefined);
+        writeStatusReply(
+            response,
+            HttpStatusCode.InternalServerError,
+            e instanceof Error ? e.message : undefined,
+        );
     }
 };
 

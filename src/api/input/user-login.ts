@@ -5,8 +5,8 @@ export type UserLoginObject = {
 
 export function isUserLoginObject(obj: unknown): obj is UserLoginObject {
     return (
-        typeof obj === 'object' &&
         obj !== null &&
+        typeof obj === 'object' &&
         'name' in obj &&
         typeof obj.name === 'string' &&
         'password' in obj &&
