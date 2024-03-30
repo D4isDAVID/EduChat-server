@@ -16,6 +16,7 @@ const httpStatusMessages: {
     [HttpStatusCode.NotFound]: '404 Not Found',
     [HttpStatusCode.MethodNotAllowed]: '405 Method Not Allowed',
     [HttpStatusCode.Conflict]: '409 Conflict',
+    [HttpStatusCode.Gone]: '410 Gone',
     [HttpStatusCode.TooManyRequests]: '429 Too Many Request',
     [HttpStatusCode.InternalServerError]: '500 Internal Server Error',
     [HttpStatusCode.NotImplemented]: '501 Not Implemented',
