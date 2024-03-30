@@ -92,7 +92,6 @@ function internalErrorReply(
         response,
         {
             code,
-            status,
             message,
         },
         status,
