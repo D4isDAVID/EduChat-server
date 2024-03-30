@@ -35,8 +35,9 @@ const apiErrorStatuses: {
     [ApiError.BadUsernameFormat]: HttpStatusCode.BadRequest,
     [ApiError.BadEmailFormat]: HttpStatusCode.BadRequest,
     [ApiError.BadPasswordFormat]: HttpStatusCode.BadRequest,
-    [ApiError.InvalidPassword]: HttpStatusCode.Forbidden,
-    [ApiError.InvalidToken]: HttpStatusCode.Unauthorized,
+    [ApiError.InvalidAuthorization]: HttpStatusCode.Unauthorized,
+    [ApiError.InvalidUsername]: HttpStatusCode.Unauthorized,
+    [ApiError.InvalidPassword]: HttpStatusCode.Unauthorized,
 
     [ApiError._Limitations]: null,
     [ApiError.UsernameUnavailable]: HttpStatusCode.Conflict,
@@ -60,8 +61,9 @@ const apiErrorMessages: {
     [ApiError.BadEmailFormat]: 'Invalid email format',
     [ApiError.BadPasswordFormat]:
         'Password must contain a mix of numbers, letters and symbols.',
+    [ApiError.InvalidAuthorization]: 'Invalid authorization',
+    [ApiError.InvalidUsername]: 'Invalid username',
     [ApiError.InvalidPassword]: 'Invalid password',
-    [ApiError.InvalidToken]: 'Invalid token',
 
     [ApiError._Limitations]: null,
     [ApiError.UsernameUnavailable]: 'Username unavailable',

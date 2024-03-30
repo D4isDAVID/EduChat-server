@@ -12,7 +12,6 @@ model User {
   name         String   @unique
   email        String
   passwordHash String
-  token        String
   createdAt    DateTime @default(now())
   admin        Boolean  @default(false)
   student      Boolean  @default(false)

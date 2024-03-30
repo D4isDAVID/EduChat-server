@@ -1,5 +1,3 @@
-import { hash } from 'bcrypt';
-
 export type UserCreateObject = {
     readonly name: string;
     readonly email: string;
@@ -21,23 +19,4 @@ export function isUserCreateObject(obj: unknown): obj is UserCreateObject {
         (!('student' in obj) || typeof obj.student === 'boolean') &&
         (!('teacher' in obj) || typeof obj.teacher === 'boolean')
     );
-}
-
-const hashSaltRounds = 10;
-
-const randomHexStr = () =>
-    Math.floor(Math.random() * (0xffffff - 0x111111 + 1) + 0x111111).toString(
-        16,
-    );
-
-export async function createPasswordHashAndToken(password: string): Promise<{
-    token: string;
-    passwordHash: string;
-}> {
-    const token = `${Date.now().toString(16)}.${randomHexStr()}-${randomHexStr()}`;
-
-    return {
-        token,
-        passwordHash: await hash(password, hashSaltRounds),
-    };
 }

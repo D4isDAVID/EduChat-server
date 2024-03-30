@@ -1,9 +1,7 @@
 import { Prisma } from '@prisma/client';
+import { hash } from 'bcrypt';
 import { ApiError } from '../../api/enums/error.js';
-import {
-    createPasswordHashAndToken,
-    isUserCreateObject,
-} from '../../api/input/user-create.js';
+import { isUserCreateObject } from '../../api/input/user-create.js';
 import { createUserObject } from '../../api/objects/user.js';
 import { validateEmail } from '../../api/validators/email.js';
 import { validatePassword } from '../../api/validators/password.js';
@@ -13,6 +11,9 @@ import { RouteHandler } from '../../http/handlers/index.js';
 import { handleJson } from '../../http/handlers/json.js';
 import { writeErrorReply } from '../../http/replies/error.js';
 import { writeJsonReply } from '../../http/replies/json.js';
+import { HttpStatusCode } from '../../http/status.js';
+
+const saltRounds = 10;
 
 export default (async (props) => {
     const { response } = props;
@@ -60,22 +61,15 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.EmailTaken);
     }
 
-    const { token, passwordHash } = await createPasswordHashAndToken(
-        data.password,
-    );
-
     const createData: Prisma.UserCreateInput = {
         name: data.name,
         email: data.email,
-        passwordHash,
-        token,
+        passwordHash: await hash(data.password, saltRounds),
     };
     if (data.student) createData.student = data.student;
     if (data.teacher) createData.teacher = data.teacher;
     const user = await prisma.user.create({ data: createData });
 
-    response.setHeader('Access-Control-Expose-Headers', 'authorization');
-    response.setHeader('Authorization', token);
     writeJsonReply(
         response,
         await createUserObject(user),
