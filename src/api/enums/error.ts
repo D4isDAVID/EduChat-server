@@ -3,6 +3,7 @@ export enum ApiError {
 
     _Unknown = 1000,
     UnknownUser,
+    UnknownCategory,
 
     _Validations = 2000,
     InvalidObject,

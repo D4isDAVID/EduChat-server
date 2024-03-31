@@ -29,6 +29,7 @@ const apiErrorStatuses: {
 
     [ApiError._Unknown]: null,
     [ApiError.UnknownUser]: HttpStatusCode.NotFound,
+    [ApiError.UnknownCategory]: HttpStatusCode.NotFound,
 
     [ApiError._Validations]: null,
     [ApiError.InvalidObject]: HttpStatusCode.BadRequest,
@@ -57,6 +58,7 @@ const apiErrorMessages: {
 
     [ApiError._Unknown]: null,
     [ApiError.UnknownUser]: 'Unknown user',
+    [ApiError.UnknownCategory]: 'Unknown category',
 
     [ApiError._Validations]: null,
     [ApiError.InvalidObject]: 'Invalid object',
