@@ -37,7 +37,6 @@ export default (async (props) => {
         name: data.name,
     };
     if (data.description) createData.description = data.description;
-    if (data.pinned) createData.pinned = data.pinned;
     const category = await prisma.category.create({ data: createData });
 
     writeJsonReply(
