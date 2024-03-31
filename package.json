@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.12.2",
     "prettier": "^3.2.5",
     "prisma": "^5.11.0",
     "typescript": "^5.4.3"
