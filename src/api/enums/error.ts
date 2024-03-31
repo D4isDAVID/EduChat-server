@@ -15,6 +15,7 @@ export enum ApiError {
     BadCategoryName,
 
     _Limitations = 3000,
+    NotStudentOrTeacher,
     UsernameUnavailable,
     EmailTaken,
     BadUsernameLength,

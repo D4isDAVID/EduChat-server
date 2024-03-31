@@ -38,6 +38,10 @@ export default (async (props) => {
         return writeErrorReply(response, passwordError);
     }
 
+    if (!data.student && !data.teacher) {
+        return writeErrorReply(response, ApiError.NotStudentOrTeacher);
+    }
+
     const takenUser = await prisma.user.findFirst({
         where: {
             OR: [

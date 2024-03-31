@@ -41,6 +41,7 @@ const apiErrorStatuses: {
     [ApiError.BadCategoryName]: HttpStatusCode.BadRequest,
 
     [ApiError._Limitations]: null,
+    [ApiError.NotStudentOrTeacher]: HttpStatusCode.BadRequest,
     [ApiError.UsernameUnavailable]: HttpStatusCode.Conflict,
     [ApiError.EmailTaken]: HttpStatusCode.Conflict,
     [ApiError.BadUsernameLength]: HttpStatusCode.BadRequest,
@@ -70,6 +71,7 @@ const apiErrorMessages: {
     [ApiError.BadCategoryName]: 'Category names cannot contain newlines',
 
     [ApiError._Limitations]: null,
+    [ApiError.NotStudentOrTeacher]: 'User must be a student or teacher',
     [ApiError.UsernameUnavailable]: 'Username unavailable',
     [ApiError.EmailTaken]: 'This email is taken',
     [ApiError.BadUsernameLength]: 'Username must be between 2-32 characters',
