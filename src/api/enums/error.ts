@@ -12,6 +12,7 @@ export enum ApiError {
     InvalidAuthorization,
     InvalidUsername,
     InvalidPassword,
+    BadCategoryName,
 
     _Limitations = 3000,
     UsernameUnavailable,

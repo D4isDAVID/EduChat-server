@@ -38,6 +38,7 @@ const apiErrorStatuses: {
     [ApiError.InvalidAuthorization]: HttpStatusCode.Unauthorized,
     [ApiError.InvalidUsername]: HttpStatusCode.Unauthorized,
     [ApiError.InvalidPassword]: HttpStatusCode.Unauthorized,
+    [ApiError.BadCategoryName]: HttpStatusCode.BadRequest,
 
     [ApiError._Limitations]: null,
     [ApiError.UsernameUnavailable]: HttpStatusCode.Conflict,
@@ -66,6 +67,7 @@ const apiErrorMessages: {
     [ApiError.InvalidAuthorization]: 'Invalid authorization',
     [ApiError.InvalidUsername]: 'Invalid username',
     [ApiError.InvalidPassword]: 'Invalid password',
+    [ApiError.BadCategoryName]: 'Category names cannot contain newlines',
 
     [ApiError._Limitations]: null,
     [ApiError.UsernameUnavailable]: 'Username unavailable',
