@@ -45,6 +45,7 @@ const apiErrorStatuses: {
     [ApiError.BadUsernameLength]: HttpStatusCode.BadRequest,
     [ApiError.BadPasswordLength]: HttpStatusCode.BadRequest,
     [ApiError.NewPasswordIsCurrent]: HttpStatusCode.Conflict,
+    [ApiError.NoPermission]: HttpStatusCode.Forbidden,
 };
 
 const apiErrorMessages: {
@@ -73,6 +74,7 @@ const apiErrorMessages: {
     [ApiError.BadPasswordLength]: 'Password must be between 6-128 characters',
     [ApiError.NewPasswordIsCurrent]:
         'New password cannot be the current password',
+    [ApiError.NoPermission]: 'No permission',
 };
 
 function internalErrorReply(

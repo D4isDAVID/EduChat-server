@@ -15,10 +15,7 @@ import { handleAuthorization } from '../../../http/handlers/authorization.js';
 import { RouteHandler } from '../../../http/handlers/index.js';
 import { handleJson } from '../../../http/handlers/json.js';
 import { writeEmptyReply } from '../../../http/replies/empty.js';
-import {
-    writeErrorReply,
-    writeStatusReply,
-} from '../../../http/replies/error.js';
+import { writeErrorReply } from '../../../http/replies/error.js';
 import { writeJsonReply } from '../../../http/replies/json.js';
 import { HttpStatusCode } from '../../../http/status.js';
 
@@ -100,6 +97,6 @@ export default (async (props) => {
 
         return writeJsonReply(response, await createUserObject(updatedUser));
     } else {
-        return writeStatusReply(response, HttpStatusCode.Forbidden);
+        return writeErrorReply(response, ApiError.NoPermission);
     }
 }) satisfies RouteHandler;
