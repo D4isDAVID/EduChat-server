@@ -1,5 +1,5 @@
 import { ApiError } from '../../../api/enums/error.js';
-import { createUserObject } from '../../../api/objects/user.js';
+import { createUserObject, meId } from '../../../api/objects/user.js';
 import { prisma } from '../../../env.js';
 import { handleAuthorization } from '../../../http/handlers/authorization.js';
 import { RouteHandler } from '../../../http/handlers/index.js';
@@ -14,6 +14,10 @@ export default (async (props) => {
 
     const user = await handleAuthorization(props);
     if (!user) return;
+
+    if (rawId === meId) {
+        return writeJsonReply(response, await createUserObject(user));
+    }
 
     const targetId = parseInt(rawId!);
     if (isNaN(targetId)) {
