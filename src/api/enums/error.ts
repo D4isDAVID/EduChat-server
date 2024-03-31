@@ -14,6 +14,7 @@ export enum ApiError {
     InvalidUsername,
     InvalidPassword,
     BadCategoryName,
+    BadPostTitle,
 
     _Limitations = 3000,
     NotStudentOrTeacher,
@@ -22,5 +23,8 @@ export enum ApiError {
     BadUsernameLength,
     BadPasswordLength,
     NewPasswordIsCurrent,
+
+    _Permissions = 4000,
     NoPermission,
+    CategoryLocked,
 }

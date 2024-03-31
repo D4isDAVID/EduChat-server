@@ -40,6 +40,7 @@ const apiErrorStatuses: {
     [ApiError.InvalidUsername]: HttpStatusCode.Unauthorized,
     [ApiError.InvalidPassword]: HttpStatusCode.Unauthorized,
     [ApiError.BadCategoryName]: HttpStatusCode.BadRequest,
+    [ApiError.BadPostTitle]: HttpStatusCode.BadRequest,
 
     [ApiError._Limitations]: null,
     [ApiError.NotStudentOrTeacher]: HttpStatusCode.BadRequest,
@@ -48,7 +49,10 @@ const apiErrorStatuses: {
     [ApiError.BadUsernameLength]: HttpStatusCode.BadRequest,
     [ApiError.BadPasswordLength]: HttpStatusCode.BadRequest,
     [ApiError.NewPasswordIsCurrent]: HttpStatusCode.Conflict,
+
+    [ApiError._Permissions]: null,
     [ApiError.NoPermission]: HttpStatusCode.Forbidden,
+    [ApiError.CategoryLocked]: HttpStatusCode.Forbidden,
 };
 
 const apiErrorMessages: {
@@ -71,6 +75,7 @@ const apiErrorMessages: {
     [ApiError.InvalidUsername]: 'Invalid username',
     [ApiError.InvalidPassword]: 'Invalid password',
     [ApiError.BadCategoryName]: 'Category names cannot contain newlines',
+    [ApiError.BadPostTitle]: 'Post titles cannot contain newlines',
 
     [ApiError._Limitations]: null,
     [ApiError.NotStudentOrTeacher]: 'User must be a student or teacher',
@@ -80,7 +85,10 @@ const apiErrorMessages: {
     [ApiError.BadPasswordLength]: 'Password must be between 6-128 characters',
     [ApiError.NewPasswordIsCurrent]:
         'New password cannot be the current password',
+
+    [ApiError._Permissions]: null,
     [ApiError.NoPermission]: 'No permission',
+    [ApiError.CategoryLocked]: 'Category locked',
 };
 
 function internalErrorReply(
