@@ -9,6 +9,7 @@
     "lint": "prettier --ignore-path .gitignore -c .",
     "format": "prettier --ignore-path .gitignore -w .",
     "build": "tsc",
+    "give-admin": "node ./dist/give-admin.js",
     "start": "node ."
   },
   "dependencies": {
