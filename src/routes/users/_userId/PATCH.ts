@@ -96,7 +96,7 @@ export default (async (props) => {
         });
 
         return writeJsonReply(response, await createUserObject(updatedUser));
-    } else {
-        return writeErrorReply(response, ApiError.NoPermission);
     }
+
+    return writeErrorReply(response, ApiError.NoPermission);
 }) satisfies RouteHandler;
