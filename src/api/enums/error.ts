@@ -18,4 +18,5 @@ export enum ApiError {
     EmailTaken,
     BadUsernameLength,
     BadPasswordLength,
+    NewPasswordIsCurrent,
 }

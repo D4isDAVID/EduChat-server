@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 import { hash } from 'bcrypt';
 import { ApiError } from '../../api/enums/error.js';
 import { isUserCreateObject } from '../../api/input/user-create.js';
-import { createUserObject } from '../../api/objects/user.js';
+import { createUserObject, saltRounds } from '../../api/objects/user.js';
 import { validateEmail } from '../../api/validators/email.js';
 import { validatePassword } from '../../api/validators/password.js';
 import { validateUsername } from '../../api/validators/username.js';
@@ -12,8 +12,6 @@ import { handleJson } from '../../http/handlers/json.js';
 import { writeErrorReply } from '../../http/replies/error.js';
 import { writeJsonReply } from '../../http/replies/json.js';
 import { HttpStatusCode } from '../../http/status.js';
-
-const saltRounds = 10;
 
 export default (async (props) => {
     const { response } = props;

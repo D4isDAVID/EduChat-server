@@ -44,6 +44,7 @@ const apiErrorStatuses: {
     [ApiError.EmailTaken]: HttpStatusCode.Conflict,
     [ApiError.BadUsernameLength]: HttpStatusCode.BadRequest,
     [ApiError.BadPasswordLength]: HttpStatusCode.BadRequest,
+    [ApiError.NewPasswordIsCurrent]: HttpStatusCode.Conflict,
 };
 
 const apiErrorMessages: {
@@ -70,6 +71,8 @@ const apiErrorMessages: {
     [ApiError.EmailTaken]: 'This email is taken',
     [ApiError.BadUsernameLength]: 'Username must be between 2-32 characters',
     [ApiError.BadPasswordLength]: 'Password must be between 6-128 characters',
+    [ApiError.NewPasswordIsCurrent]:
+        'New password cannot be the current password',
 };
 
 function internalErrorReply(
