@@ -40,8 +40,8 @@ const apiErrorStatuses: {
     [ApiError.InvalidAuthorization]: HttpStatusCode.Unauthorized,
     [ApiError.InvalidUsername]: HttpStatusCode.Unauthorized,
     [ApiError.InvalidPassword]: HttpStatusCode.Unauthorized,
-    [ApiError.BadCategoryName]: HttpStatusCode.BadRequest,
-    [ApiError.BadPostTitle]: HttpStatusCode.BadRequest,
+    [ApiError.InvalidCategoryName]: HttpStatusCode.BadRequest,
+    [ApiError.InvalidPostTitle]: HttpStatusCode.BadRequest,
 
     [ApiError._Limitations]: null,
     [ApiError.NotStudentOrTeacher]: HttpStatusCode.BadRequest,
@@ -50,6 +50,10 @@ const apiErrorStatuses: {
     [ApiError.BadUsernameLength]: HttpStatusCode.BadRequest,
     [ApiError.BadPasswordLength]: HttpStatusCode.BadRequest,
     [ApiError.NewPasswordIsCurrent]: HttpStatusCode.Conflict,
+    [ApiError.BadCategoryNameLength]: HttpStatusCode.BadRequest,
+    [ApiError.BadCategoryDescriptionLength]: HttpStatusCode.BadRequest,
+    [ApiError.BadPostTitleLength]: HttpStatusCode.BadRequest,
+    [ApiError.BadMessageContentLength]: HttpStatusCode.BadRequest,
 
     [ApiError._Permissions]: null,
     [ApiError.NoPermission]: HttpStatusCode.Forbidden,
@@ -76,8 +80,8 @@ const apiErrorMessages: {
     [ApiError.InvalidAuthorization]: 'Invalid authorization',
     [ApiError.InvalidUsername]: 'Invalid username',
     [ApiError.InvalidPassword]: 'Invalid password',
-    [ApiError.BadCategoryName]: 'Category names cannot contain newlines',
-    [ApiError.BadPostTitle]: 'Post titles cannot contain newlines',
+    [ApiError.InvalidCategoryName]: 'Category names cannot contain newlines',
+    [ApiError.InvalidPostTitle]: 'Post titles cannot contain newlines',
 
     [ApiError._Limitations]: null,
     [ApiError.NotStudentOrTeacher]: 'User must be a student or teacher',
@@ -87,6 +91,14 @@ const apiErrorMessages: {
     [ApiError.BadPasswordLength]: 'Password must be between 6-128 characters',
     [ApiError.NewPasswordIsCurrent]:
         'New password cannot be the current password',
+    [ApiError.BadCategoryNameLength]:
+        'Category names must be between 1-72 characters',
+    [ApiError.BadCategoryDescriptionLength]:
+        'Category descriptions must be between 1-128 characters',
+    [ApiError.BadPostTitleLength]:
+        'Post titles must be between 1-72 characters',
+    [ApiError.BadMessageContentLength]:
+        'Message content must be between 1-2000 characters',
 
     [ApiError._Permissions]: null,
     [ApiError.NoPermission]: 'No permission',

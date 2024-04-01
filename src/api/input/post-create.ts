@@ -33,9 +33,12 @@ export function toPostCreateInput(
         return titleError;
     }
 
+    const messageData = toMessageCreateInput(obj.message, author);
+    if (typeof messageData !== 'object') return messageData;
+
     const data: Prisma.PostCreateInput = {
         message: {
-            create: toMessageCreateInput(obj.message, author),
+            create: messageData,
         },
         title: obj.title,
         category: {

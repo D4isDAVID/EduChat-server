@@ -1,4 +1,6 @@
 import { Prisma, User } from '@prisma/client';
+import { ApiError } from '../enums/error.js';
+import { validateMessageContent } from '../validators/message-content.js';
 
 export type MessageCreateObject = {
     readonly content: string;
@@ -18,7 +20,12 @@ export function isMessageCreateObject(
 export function toMessageCreateInput(
     obj: MessageCreateObject,
     author: User,
-): Prisma.MessageCreateInput {
+): Prisma.MessageCreateInput | ApiError {
+    const messageContentError = validateMessageContent(obj.content);
+    if (messageContentError) {
+        return messageContentError;
+    }
+
     const data: Prisma.MessageCreateInput = {
         content: obj.content,
         author: {

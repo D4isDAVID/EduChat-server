@@ -1,5 +1,6 @@
 import { Category, Prisma } from '@prisma/client';
 import { ApiError } from '../enums/error.js';
+import { validateCategoryDescription } from '../validators/category-description.js';
 import { validateCategoryName } from '../validators/category-name.js';
 
 export type CategoryEditObject = {
@@ -38,6 +39,15 @@ export function toCategoryUpdateInput(
     }
 
     if ('description' in obj && obj.description !== category.description) {
+        if (obj.description !== null) {
+            const descriptionError = validateCategoryDescription(
+                obj.description,
+            );
+            if (descriptionError) {
+                return descriptionError;
+            }
+        }
+
         data.description = obj.description;
     }
 
