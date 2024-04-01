@@ -1,10 +1,13 @@
 import { ApiError } from '../../../../api/enums/error.js';
-import { isPostCreateObject } from '../../../../api/input/post-create.js';
+import {
+    isPostCreateObject,
+    toPostCreateInput,
+} from '../../../../api/input/post-create.js';
 import { createPostObject } from '../../../../api/objects/post.js';
-import { validatePostTitle } from '../../../../api/validators/post-title.js';
 import { prisma } from '../../../../env.js';
 import { handleAuthorization } from '../../../../http/handlers/authorization.js';
 import { RouteHandler } from '../../../../http/handlers/index.js';
+import { handleInputConversion } from '../../../../http/handlers/input-conversion.js';
 import { handleJson } from '../../../../http/handlers/json.js';
 import { writeErrorReply } from '../../../../http/replies/error.js';
 import { writeJsonReply } from '../../../../http/replies/json.js';
@@ -32,34 +35,17 @@ export default (async (props) => {
     }
 
     const category = await prisma.category.findFirst({
-        where: {
-            id: categoryId,
-        },
+        where: { id: categoryId },
     });
 
     if (!category) {
         return writeErrorReply(response, ApiError.UnknownCategory);
     }
 
-    const titleError = validatePostTitle(data.title);
-    if (titleError) {
-        return writeErrorReply(response, titleError);
-    }
+    const createData = toPostCreateInput(data, user, category);
+    if (!handleInputConversion(props, createData)) return;
 
-    const post = await prisma.post.create({
-        data: {
-            message: {
-                create: {
-                    authorId: user.id,
-                    content: data.message.content,
-                },
-            },
-            title: data.title,
-            category: {
-                connect: category,
-            },
-        },
-    });
+    const post = await prisma.post.create({ data: createData });
 
     writeJsonReply(
         response,

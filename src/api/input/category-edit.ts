@@ -1,3 +1,7 @@
+import { Category, Prisma } from '@prisma/client';
+import { ApiError } from '../enums/error.js';
+import { validateCategoryName } from '../validators/category-name.js';
+
 export type CategoryEditObject = {
     readonly name?: string;
     readonly description?: string | null;
@@ -16,4 +20,38 @@ export function isCategoryEditObject(obj: unknown): obj is CategoryEditObject {
         (!('pinned' in obj) || typeof obj.pinned === 'boolean') &&
         (!('locked' in obj) || typeof obj.locked === 'boolean')
     );
+}
+
+export function toCategoryUpdateInput(
+    obj: CategoryEditObject,
+    category: Category,
+): Prisma.CategoryUpdateInput | ApiError | false {
+    const data: Prisma.CategoryUpdateInput = {};
+
+    if ('name' in obj && obj.name !== category.name) {
+        const nameError = validateCategoryName(obj.name);
+        if (nameError) {
+            return nameError;
+        }
+
+        data.name = obj.name;
+    }
+
+    if ('description' in obj && obj.description !== category.description) {
+        data.description = obj.description;
+    }
+
+    if ('pinned' in obj && obj.pinned !== category.pinned) {
+        data.pinned = obj.pinned;
+    }
+
+    if ('locked' in obj && obj.locked !== category.locked) {
+        data.locked = obj.locked;
+    }
+
+    if (Object.keys(data).length === 0) {
+        return false;
+    }
+
+    return data;
 }

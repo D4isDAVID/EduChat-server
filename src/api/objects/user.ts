@@ -1,7 +1,5 @@
 import { User } from '@prisma/client';
 
-export const saltRounds = 10;
-
 export type UserObject = {
     readonly id: number;
     readonly name: string;

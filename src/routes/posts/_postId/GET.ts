@@ -17,9 +17,7 @@ export default (async (props) => {
     }
 
     const post = await prisma.post.findFirst({
-        where: {
-            messageId: postId,
-        },
+        where: { messageId: postId },
     });
 
     if (!post) {

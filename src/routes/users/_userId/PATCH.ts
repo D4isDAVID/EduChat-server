@@ -1,15 +1,16 @@
-import { Prisma } from '@prisma/client';
 import { ApiError } from '../../../api/enums/error.js';
-import { isUserAdminEditObject } from '../../../api/input/user-edit.js';
+import {
+    isAdminUserEditObject,
+    toAdminUserUpdateInput,
+} from '../../../api/input/user-edit-admin.js';
 import { createUserObject } from '../../../api/objects/user.js';
 import { prisma } from '../../../env.js';
 import { handleAuthorization } from '../../../http/handlers/authorization.js';
 import { RouteHandler } from '../../../http/handlers/index.js';
+import { handleInputConversion } from '../../../http/handlers/input-conversion.js';
 import { handleJson } from '../../../http/handlers/json.js';
-import { writeEmptyReply } from '../../../http/replies/empty.js';
 import { writeErrorReply } from '../../../http/replies/error.js';
 import { writeJsonReply } from '../../../http/replies/json.js';
-import { HttpStatusCode } from '../../../http/status.js';
 
 export default (async (props) => {
     const {
@@ -27,7 +28,7 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.NoPermission);
     }
 
-    if (!isUserAdminEditObject(data)) {
+    if (!isAdminUserEditObject(data)) {
         return writeErrorReply(response, ApiError.InvalidObject);
     }
 
@@ -37,22 +38,15 @@ export default (async (props) => {
     }
 
     const target = await prisma.user.findFirst({
-        where: {
-            id: targetId,
-        },
+        where: { id: targetId },
     });
 
     if (!target) {
         return writeErrorReply(response, ApiError.UnknownUser);
     }
 
-    const updateData: Prisma.UserUpdateInput = {};
-    if (data.name && data.name !== target.name) {
-        updateData.name = data.name;
-    }
-    if (Object.keys(updateData).length === 0) {
-        return writeEmptyReply(response, HttpStatusCode.NotModified);
-    }
+    const updateData = toAdminUserUpdateInput(data, user);
+    if (!handleInputConversion(props, updateData)) return;
 
     const updatedUser = await prisma.user.update({
         where: { id: target.id },

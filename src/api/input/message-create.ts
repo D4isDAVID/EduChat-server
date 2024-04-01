@@ -1,3 +1,5 @@
+import { Prisma, User } from '@prisma/client';
+
 export type MessageCreateObject = {
     readonly content: string;
 };
@@ -11,4 +13,18 @@ export function isMessageCreateObject(
         'content' in obj &&
         typeof obj.content === 'string'
     );
+}
+
+export function toMessageCreateInput(
+    obj: MessageCreateObject,
+    author: User,
+): Prisma.MessageCreateInput {
+    const data: Prisma.MessageCreateInput = {
+        content: obj.content,
+        author: {
+            connect: { id: author.id },
+        },
+    };
+
+    return data;
 }

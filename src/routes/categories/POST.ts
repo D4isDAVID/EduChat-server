@@ -1,11 +1,13 @@
-import { Prisma } from '@prisma/client';
 import { ApiError } from '../../api/enums/error.js';
-import { isCategoryCreateObject } from '../../api/input/category-create.js';
+import {
+    isCategoryCreateObject,
+    toCategoryCreateInput,
+} from '../../api/input/category-create.js';
 import { createCategoryObject } from '../../api/objects/category.js';
-import { validateCategoryName } from '../../api/validators/category-name.js';
 import { prisma } from '../../env.js';
 import { handleAuthorization } from '../../http/handlers/authorization.js';
 import { RouteHandler } from '../../http/handlers/index.js';
+import { handleInputConversion } from '../../http/handlers/input-conversion.js';
 import { handleJson } from '../../http/handlers/json.js';
 import { writeErrorReply } from '../../http/replies/error.js';
 import { writeJsonReply } from '../../http/replies/json.js';
@@ -28,15 +30,9 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.InvalidObject);
     }
 
-    const nameError = validateCategoryName(data.name);
-    if (nameError) {
-        return writeErrorReply(response, nameError);
-    }
+    const createData = toCategoryCreateInput(data);
+    if (!handleInputConversion(props, createData)) return;
 
-    const createData: Prisma.CategoryCreateInput = {
-        name: data.name,
-    };
-    if (data.description) createData.description = data.description;
     const category = await prisma.category.create({ data: createData });
 
     writeJsonReply(

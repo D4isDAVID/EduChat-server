@@ -17,9 +17,7 @@ export default (async (props) => {
     }
 
     const category = await prisma.category.findFirst({
-        where: {
-            id: categoryId,
-        },
+        where: { id: categoryId },
     });
 
     if (!category) {
