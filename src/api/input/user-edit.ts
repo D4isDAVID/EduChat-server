@@ -1,4 +1,4 @@
-export type UserSelfEditObject = {
+export type UserEditObject = {
     readonly name?: string;
     readonly email?: string;
     readonly password?: string;
@@ -8,7 +8,7 @@ export type UserAdminEditObject = {
     readonly name?: string;
 };
 
-export function isSelfUserEditObject(obj: unknown): obj is UserSelfEditObject {
+export function isUserEditObject(obj: unknown): obj is UserEditObject {
     return (
         obj !== null &&
         typeof obj === 'object' &&
@@ -18,7 +18,7 @@ export function isSelfUserEditObject(obj: unknown): obj is UserSelfEditObject {
     );
 }
 
-export function isAdminUserEditObject(
+export function isUserAdminEditObject(
     obj: unknown,
 ): obj is UserAdminEditObject {
     return (
