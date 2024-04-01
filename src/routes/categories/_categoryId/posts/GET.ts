@@ -10,7 +10,6 @@ import {
 } from '../../../../http/handlers/search-params.js';
 import { writeErrorReply } from '../../../../http/replies/error.js';
 import { writeJsonReply } from '../../../../http/replies/json.js';
-import { HttpStatusCode } from '../../../../http/status.js';
 
 export default (async (props) => {
     const {
@@ -48,9 +47,5 @@ export default (async (props) => {
         skip,
     });
 
-    writeJsonReply(
-        response,
-        await createPostsArray(posts),
-        HttpStatusCode.Created,
-    );
+    writeJsonReply(response, await createPostsArray(posts));
 }) satisfies RouteHandler;
