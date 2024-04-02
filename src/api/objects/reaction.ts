@@ -25,3 +25,9 @@ export async function createReactionObject(
         message: reaction.messageId,
     };
 }
+
+export async function createReactionsArray(
+    reactions: Reaction[],
+): Promise<ReactionObject[]> {
+    return Promise.all(reactions.map((r) => createReactionObject(r)));
+}
