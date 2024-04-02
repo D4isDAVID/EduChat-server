@@ -9,8 +9,8 @@ generator client {
 
 model User {
   id           Int      @id @default(autoincrement())
-  name         String   @unique
-  email        String   @unique
+  name         String
+  email        String
   passwordHash String
   createdAt    DateTime @default(now())
   admin        Boolean  @default(false)
