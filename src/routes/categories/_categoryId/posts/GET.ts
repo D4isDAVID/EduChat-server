@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client';
+import { DefaultArgs } from '@prisma/client/runtime/library';
 import { ApiError } from '../../../../api/enums/error.js';
 import { createPostsArray } from '../../../../api/objects/post.js';
 import { prisma } from '../../../../env.js';
@@ -17,15 +19,13 @@ export default (async (props) => {
         params: [rawId],
     } = props;
 
-    const { take, skip } = handleSearchParams(props, {
-        take: defaultValueParam(
+    const { limit, after, before } = handleSearchParams(props, {
+        limit: defaultValueParam(
             filterParam(intParam, (x) => x >= 1 && x <= 100),
             100,
         ),
-        skip: defaultValueParam(
-            filterParam(intParam, (x) => x > 0),
-            0,
-        ),
+        after: intParam,
+        before: intParam,
     });
 
     const categoryId = parseInt(rawId!);
@@ -41,11 +41,21 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.UnknownCategory);
     }
 
-    const posts = await prisma.post.findMany({
+    const findData: Prisma.PostFindManyArgs<DefaultArgs> = {
         where: { categoryId },
-        take,
-        skip,
-    });
+        orderBy: { message: { createdAt: 'desc' } },
+        take: limit,
+    };
+
+    if (typeof after !== 'undefined' || typeof before !== 'undefined') {
+        if (typeof after !== 'undefined') {
+            findData.orderBy = { message: { createdAt: 'asc' } };
+        }
+        findData.cursor = { messageId: (after ?? before)! };
+        findData.skip = 1;
+    }
+
+    const posts = await prisma.post.findMany(findData);
 
     writeJsonReply(response, await createPostsArray(posts));
 }) satisfies RouteHandler;
