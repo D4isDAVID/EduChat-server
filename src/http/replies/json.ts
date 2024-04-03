@@ -15,7 +15,7 @@ export function writeJsonReply(
     response: ServerResponse,
     obj: JsonType,
     status: HttpStatusCode = HttpStatusCode.OK,
-) {
+): undefined {
     response.statusCode = status;
     response.setHeader('Content-Type', 'application/json');
     response.write(JSON.stringify(obj));

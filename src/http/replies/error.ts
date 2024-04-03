@@ -116,7 +116,7 @@ function internalErrorReply(
         status?: HttpStatusCode;
         message?: string | undefined;
     } = {},
-) {
+): undefined {
     const code = _code ?? ApiError.Generic;
     const status =
         _status ?? apiErrorStatuses[code] ?? HttpStatusCode.InternalServerError;

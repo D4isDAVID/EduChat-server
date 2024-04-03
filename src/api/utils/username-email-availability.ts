@@ -10,7 +10,7 @@ export async function checkUsernameAndEmailAvailability({
     name?: string | undefined;
     email?: string | undefined;
     user?: User | undefined;
-}): Promise<ApiError | void> {
+}): Promise<ApiError | undefined> {
     if (!name && !email) {
         return;
     }

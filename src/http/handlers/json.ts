@@ -6,7 +6,7 @@ import { RouteHandlerProps } from './index.js';
 
 export const handleJson = async (
     props: RouteHandlerProps,
-): Promise<JsonType | void> => {
+): Promise<JsonType | undefined> => {
     const { request, response } = props;
 
     const data = await handleData(props);

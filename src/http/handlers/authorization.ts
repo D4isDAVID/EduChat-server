@@ -9,7 +9,7 @@ import { RouteHandlerProps } from './index.js';
 export const handleAuthorization = async ({
     request,
     response,
-}: RouteHandlerProps): Promise<User | void> => {
+}: RouteHandlerProps): Promise<User | undefined> => {
     const auth = request.headers.authorization;
     if (!auth) {
         return writeStatusReply(response, HttpStatusCode.Unauthorized);

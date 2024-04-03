@@ -1,6 +1,6 @@
 import { ApiError } from '../enums/error.js';
 
-export function validateCategoryName(name: string): ApiError | void {
+export function validateCategoryName(name: string): ApiError | undefined {
     if (name.length < 1 || name.length > 72) {
         return ApiError.BadCategoryNameLength;
     }
