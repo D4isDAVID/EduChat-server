@@ -32,7 +32,7 @@ const listener: RequestListener = async (request, response) => {
         writeStatusReply(
             response,
             HttpStatusCode.InternalServerError,
-            e instanceof Error ? e.message : undefined,
+            e instanceof Error ? `Error: ${e.message}` : undefined,
         );
     }
 };
