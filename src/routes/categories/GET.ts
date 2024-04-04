@@ -15,9 +15,8 @@ export default (async (props) => {
     });
 
     const categories = await prisma.category.findMany({
-        where: {
-            parentId: parentId ?? null,
-        },
+        where: { parentId: parentId ?? null },
+        orderBy: [{ pinned: 'desc' }, { name: 'asc' }],
     });
 
     writeJsonReply(response, await createCategoriesArray(categories));
