@@ -6,6 +6,7 @@ import { validateCategoryName } from '../validators/category-name.js';
 export type CategoryCreateObject = {
     readonly name: string;
     readonly description?: string;
+    readonly parentId?: number;
 };
 
 export function isCategoryCreateObject(
@@ -16,7 +17,8 @@ export function isCategoryCreateObject(
         typeof obj === 'object' &&
         'name' in obj &&
         typeof obj.name === 'string' &&
-        (!('description' in obj) || typeof obj.description === 'string')
+        (!('description' in obj) || typeof obj.description === 'string') &&
+        (!('parentId' in obj) || typeof obj.parentId === 'number')
     );
 }
 
@@ -39,6 +41,12 @@ export function toCategoryCreateInput(
         }
 
         input.description = obj.description;
+    }
+
+    if ('parentId' in obj) {
+        input.parent = {
+            connect: { id: obj.parentId },
+        };
     }
 
     return input;

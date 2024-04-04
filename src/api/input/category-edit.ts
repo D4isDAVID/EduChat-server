@@ -8,6 +8,7 @@ export type CategoryEditObject = {
     readonly description?: string | null;
     readonly pinned?: boolean;
     readonly locked?: boolean;
+    readonly parentId?: number;
 };
 
 export function isCategoryEditObject(obj: unknown): obj is CategoryEditObject {
@@ -19,7 +20,8 @@ export function isCategoryEditObject(obj: unknown): obj is CategoryEditObject {
             obj.description === null ||
             typeof obj.description === 'string') &&
         (!('pinned' in obj) || typeof obj.pinned === 'boolean') &&
-        (!('locked' in obj) || typeof obj.locked === 'boolean')
+        (!('locked' in obj) || typeof obj.locked === 'boolean') &&
+        (!('parentId' in obj) || typeof obj.parentId === 'number')
     );
 }
 
@@ -57,6 +59,16 @@ export function toCategoryUpdateInput(
 
     if ('locked' in obj && obj.locked !== category.locked) {
         data.locked = obj.locked;
+    }
+
+    if (
+        'parentId' in obj &&
+        obj.parentId !== category.parentId &&
+        obj.parentId !== category.id
+    ) {
+        data.parent = {
+            connect: { id: obj.parentId },
+        };
     }
 
     if (Object.keys(data).length === 0) {

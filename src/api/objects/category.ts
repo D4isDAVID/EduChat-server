@@ -6,6 +6,7 @@ export type CategoryObject = {
     readonly description: string | null;
     readonly pinned: boolean;
     readonly locked: boolean;
+    readonly parentId: number | null;
 };
 
 export async function createCategoryObject(
@@ -17,6 +18,7 @@ export async function createCategoryObject(
         description: category.description,
         pinned: category.pinned,
         locked: category.locked,
+        parentId: category.parentId,
     };
 }
 
