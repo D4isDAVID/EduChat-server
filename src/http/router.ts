@@ -86,7 +86,7 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
     return (route: string, method: SupportedMethod, params: string[] = []) => {
         const splitRoute = route
             .replace(/^\//, '')
-            .split('/', 3)
+            .split('/')
             .filter((s) => s !== '');
 
         if (splitRoute.length === 0) {
