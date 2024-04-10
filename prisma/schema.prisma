@@ -22,9 +22,8 @@ model User {
   blockers  User[] @relation("UserBlocks")
   blocking  User[] @relation("UserBlocks")
 
-  messages       Message[]
-  reactions      Reaction[]
-  directMessages Message[]  @relation("DirectMessages")
+  messages  Message[]
+  reactions Reaction[]
 }
 
 model Category {
@@ -66,10 +65,8 @@ model Message {
   parent   Message?  @relation("ParentReplies", fields: [parentId], references: [id])
   replies  Message[] @relation("ParentReplies")
 
-  authorId    Int
-  author      User  @relation(fields: [authorId], references: [id])
-  recipientId Int?
-  recipient   User? @relation("DirectMessages", fields: [recipientId], references: [id])
+  authorId Int
+  author   User @relation(fields: [authorId], references: [id])
 
   reactions Reaction[]
 }
