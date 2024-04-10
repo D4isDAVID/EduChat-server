@@ -7,7 +7,7 @@ export type ReactionObject = {
     readonly emoji: string;
 
     readonly user: UserObject;
-    readonly message: number;
+    readonly messageId: number;
 };
 
 export async function createReactionObject(
@@ -22,7 +22,7 @@ export async function createReactionObject(
         emoji: reaction.emoji,
 
         user: await createUserObject(user),
-        message: reaction.messageId,
+        messageId: reaction.messageId,
     };
 }
 

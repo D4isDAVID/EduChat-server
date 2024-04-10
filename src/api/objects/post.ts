@@ -8,7 +8,7 @@ export type PostObject = {
     readonly pinned: boolean;
     readonly locked: boolean;
 
-    readonly category: number;
+    readonly categoryId: number;
 };
 
 export async function createPostObject(post: Post): Promise<PostObject> {
@@ -22,7 +22,7 @@ export async function createPostObject(post: Post): Promise<PostObject> {
         pinned: post.pinned,
         locked: post.locked,
 
-        category: post.categoryId,
+        categoryId: post.categoryId,
     };
 }
 
