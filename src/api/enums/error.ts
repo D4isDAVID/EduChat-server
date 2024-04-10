@@ -33,4 +33,5 @@ export enum ApiError {
     _Permissions = 4000,
     NoPermission,
     CategoryLocked,
+    PostLocked,
 }

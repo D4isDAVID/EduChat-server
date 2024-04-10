@@ -42,6 +42,10 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.UnknownPost);
     }
 
+    if (post.locked) {
+        return writeErrorReply(response, ApiError.PostLocked);
+    }
+
     const createData = toPostReplyCreateInput(data, user, post);
     if (!handleInputConversion(props, createData)) return;
 

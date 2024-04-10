@@ -59,6 +59,7 @@ const apiErrorStatuses: {
     [ApiError._Permissions]: null,
     [ApiError.NoPermission]: HttpStatusCode.Forbidden,
     [ApiError.CategoryLocked]: HttpStatusCode.Forbidden,
+    [ApiError.PostLocked]: HttpStatusCode.Forbidden,
 };
 
 const apiErrorMessages: {
@@ -105,6 +106,7 @@ const apiErrorMessages: {
     [ApiError._Permissions]: null,
     [ApiError.NoPermission]: 'No permission',
     [ApiError.CategoryLocked]: 'Category locked',
+    [ApiError.PostLocked]: 'Post locked',
 };
 
 function internalErrorReply(

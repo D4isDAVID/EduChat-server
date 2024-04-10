@@ -42,6 +42,10 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.UnknownCategory);
     }
 
+    if (category.locked) {
+        return writeErrorReply(response, ApiError.CategoryLocked);
+    }
+
     const createData = toPostCreateInput(data, user, category);
     if (!handleInputConversion(props, createData)) return;
 
