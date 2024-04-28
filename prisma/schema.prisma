@@ -44,8 +44,11 @@ model Post {
   messageId Int     @id
   message   Message @relation(fields: [messageId], references: [id])
   title     String
-  pinned    Boolean @default(false)
   locked    Boolean @default(false)
+  question  Boolean @default(true)
+
+  answerId Int?     @unique
+  answer   Message? @relation("QuestionAnswer", fields: [answerId], references: [id])
 
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id])
@@ -59,7 +62,8 @@ model Message {
   pinned    Boolean   @default(false)
   hidden    Boolean   @default(false)
 
-  post Post?
+  post     Post?
+  question Post? @relation("QuestionAnswer")
 
   parentId Int?
   parent   Message?  @relation("ParentReplies", fields: [parentId], references: [id])

@@ -10,8 +10,8 @@ import {
 export type AdminPostEditObject = {
     readonly message?: MessageEditObject;
     readonly title?: string;
-    readonly pinned?: boolean;
     readonly locked?: boolean;
+    readonly question?: boolean;
 };
 
 export function isAdminPostEditObject(
@@ -23,7 +23,8 @@ export function isAdminPostEditObject(
         (!('message' in obj) || isMessageEditObject(obj.message)) &&
         (!('title' in obj) || typeof obj.title === 'string') &&
         (!('pinned' in obj) || typeof obj.pinned === 'boolean') &&
-        (!('locked' in obj) || typeof obj.locked === 'boolean')
+        (!('locked' in obj) || typeof obj.locked === 'boolean') &&
+        (!('question' in obj) || typeof obj.question === 'boolean')
     );
 }
 
@@ -47,12 +48,12 @@ export function toAdminPostUpdateInput(
         data.title = obj.title;
     }
 
-    if ('pinned' in obj && obj.pinned !== post.pinned) {
-        data.pinned = obj.pinned;
-    }
-
     if ('locked' in obj && obj.locked !== post.locked) {
         data.locked = obj.locked;
+    }
+
+    if ('question' in obj && obj.question !== post.question) {
+        data.question = obj.question;
     }
 
     if (Object.keys(data).length === 0) {

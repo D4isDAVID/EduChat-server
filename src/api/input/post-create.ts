@@ -10,6 +10,7 @@ import {
 export type PostCreateObject = {
     readonly message: MessageCreateObject;
     readonly title: string;
+    readonly question: boolean;
 };
 
 export function isPostCreateObject(obj: unknown): obj is PostCreateObject {
@@ -41,6 +42,7 @@ export function toPostCreateInput(
             create: messageData,
         },
         title: obj.title,
+        question: obj.question,
         category: {
             connect: { id: category.id },
         },

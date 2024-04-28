@@ -43,7 +43,10 @@ export default (async (props) => {
 
     const findData: Prisma.PostFindManyArgs<DefaultArgs> = {
         where: { categoryId },
-        orderBy: [{ pinned: 'desc' }, { message: { createdAt: 'desc' } }],
+        orderBy: [
+            { message: { pinned: 'desc' } },
+            { message: { createdAt: 'desc' } },
+        ],
         take: limit,
     };
 

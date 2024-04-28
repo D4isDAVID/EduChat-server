@@ -5,8 +5,9 @@ import { MessageObject, createMessageObject } from './message.js';
 export type PostObject = {
     readonly message: MessageObject;
     readonly title: string;
-    readonly pinned: boolean;
     readonly locked: boolean;
+    readonly question: boolean;
+    readonly answerId: number | null;
 
     readonly categoryId: number;
 };
@@ -19,8 +20,9 @@ export async function createPostObject(post: Post): Promise<PostObject> {
     return {
         message: await createMessageObject(message),
         title: post.title,
-        pinned: post.pinned,
         locked: post.locked,
+        question: post.question,
+        answerId: post.answerId,
 
         categoryId: post.categoryId,
     };

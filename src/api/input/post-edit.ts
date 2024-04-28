@@ -1,4 +1,5 @@
 import { Message, Post, Prisma } from '@prisma/client';
+import { prisma } from '../../env.js';
 import { ApiError } from '../enums/error.js';
 import { validatePostTitle } from '../validators/post-title.js';
 import {
@@ -10,6 +11,8 @@ import {
 export type PostEditObject = {
     readonly message?: MessageEditObject;
     readonly title?: string;
+    readonly question?: boolean;
+    readonly answerId?: number | null;
 };
 
 export function isPostEditObject(obj: unknown): obj is PostEditObject {
@@ -21,10 +24,10 @@ export function isPostEditObject(obj: unknown): obj is PostEditObject {
     );
 }
 
-export function toPostUpdateInput(
+export async function toPostUpdateInput(
     obj: PostEditObject,
     post: Post & { message: Message },
-): Prisma.PostUpdateInput | ApiError | false {
+): Promise<Prisma.PostUpdateInput | ApiError | false> {
     const data: Prisma.PostUpdateInput = {};
 
     if ('message' in obj) {
@@ -39,6 +42,23 @@ export function toPostUpdateInput(
         if (titleError) return titleError;
 
         data.title = obj.title;
+    }
+
+    if ('question' in obj && obj.question !== post.question) {
+        data.question = obj.question;
+    }
+
+    if ('answerId' in obj && obj.answerId !== post.answerId) {
+        if (obj.answerId === null) {
+            data.answer = { delete: true };
+        } else {
+            const reply = await prisma.message.findFirst({
+                where: { id: obj.answerId },
+            });
+            if (!reply) return ApiError.UnknownPostReply;
+
+            data.answer = { connect: { id: obj.answerId } };
+        }
     }
 
     if (Object.keys(data).length === 0) {
