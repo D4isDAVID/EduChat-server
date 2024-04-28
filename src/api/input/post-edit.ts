@@ -53,7 +53,7 @@ export async function toPostUpdateInput(
             data.answer = { delete: true };
         } else {
             const reply = await prisma.message.findFirst({
-                where: { id: obj.answerId },
+                where: { id: obj.answerId, parentId: post.messageId },
             });
             if (!reply) return ApiError.UnknownPostReply;
 
