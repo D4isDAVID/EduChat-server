@@ -21,7 +21,6 @@ export default (async (props) => {
     } = props;
 
     const emojiError = validateEmoji(emoji!);
-    console.log(emoji);
     if (typeof emojiError !== 'undefined') {
         return writeErrorReply(response, emojiError);
     }
