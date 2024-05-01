@@ -3,11 +3,9 @@ import { prisma } from '../../env.js';
 import { UserObject, createUserObject } from './user.js';
 
 export type ReactionObject = {
-    readonly id: number;
-    readonly emoji: string;
-
-    readonly user: UserObject;
     readonly messageId: number;
+    readonly emoji: string;
+    readonly user: UserObject;
 };
 
 export async function createReactionObject(
@@ -18,11 +16,9 @@ export async function createReactionObject(
     }))!;
 
     return {
-        id: reaction.id,
-        emoji: reaction.emoji,
-
-        user: await createUserObject(user),
         messageId: reaction.messageId,
+        emoji: reaction.emoji,
+        user: await createUserObject(user),
     };
 }
 

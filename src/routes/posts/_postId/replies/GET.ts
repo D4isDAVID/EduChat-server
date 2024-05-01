@@ -1,6 +1,7 @@
 import { ApiError } from '../../../../api/enums/error.js';
 import { createMessagesArray } from '../../../../api/objects/message.js';
 import { prisma } from '../../../../env.js';
+import { handleAuthorization } from '../../../../http/handlers/authorization.js';
 import { RouteHandler } from '../../../../http/handlers/index.js';
 import { writeErrorReply } from '../../../../http/replies/error.js';
 import { writeJsonReply } from '../../../../http/replies/json.js';
@@ -10,6 +11,8 @@ export default (async (props) => {
         response,
         params: [rawId],
     } = props;
+
+    const user = await handleAuthorization(props, false);
 
     const postId = parseInt(rawId!);
     if (isNaN(postId)) {
@@ -29,5 +32,5 @@ export default (async (props) => {
         orderBy: [{ pinned: 'desc' }, { createdAt: 'desc' }],
     });
 
-    writeJsonReply(response, await createMessagesArray(replies));
+    writeJsonReply(response, await createMessagesArray(replies, user));
 }) satisfies RouteHandler;

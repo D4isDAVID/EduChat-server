@@ -76,11 +76,12 @@ model Message {
 }
 
 model Reaction {
-  id    Int    @id @default(autoincrement())
-  emoji String
-
-  userId    Int
-  user      User    @relation(fields: [userId], references: [id])
   messageId Int
-  message   Message @relation(fields: [messageId], references: [id])
+  message   Message  @relation(fields: [messageId], references: [id])
+  emoji     String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@id([messageId, emoji, userId])
 }

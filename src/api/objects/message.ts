@@ -1,5 +1,9 @@
-import { Message } from '@prisma/client';
+import { Message, User } from '@prisma/client';
 import { prisma } from '../../env.js';
+import {
+    ReactionCountObject,
+    createReactionCountsArray,
+} from './reaction-count.js';
 import { UserObject, createUserObject } from './user.js';
 
 export type MessageObject = {
@@ -9,12 +13,14 @@ export type MessageObject = {
     readonly editedAt: string | null;
     readonly pinned: boolean;
     readonly hidden: boolean;
+    readonly reactions: ReactionCountObject[];
 
     readonly author: UserObject;
 };
 
 export async function createMessageObject(
     message: Message,
+    user: User | null,
 ): Promise<MessageObject> {
     const author = (await prisma.user.findFirst({
         where: { id: message.authorId },
@@ -29,6 +35,7 @@ export async function createMessageObject(
             : null,
         pinned: message.pinned,
         hidden: message.hidden,
+        reactions: await createReactionCountsArray(message, user),
 
         author: await createUserObject(author),
     };
@@ -36,6 +43,7 @@ export async function createMessageObject(
 
 export async function createMessagesArray(
     messages: Message[],
+    user: User | null,
 ): Promise<MessageObject[]> {
-    return Promise.all(messages.map((m) => createMessageObject(m)));
+    return Promise.all(messages.map((m) => createMessageObject(m, user)));
 }

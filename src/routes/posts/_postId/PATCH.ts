@@ -55,7 +55,10 @@ export default (async (props) => {
             data: updateData,
         });
 
-        return writeJsonReply(response, await createPostObject(updatedPost));
+        return writeJsonReply(
+            response,
+            await createPostObject(updatedPost, user),
+        );
     }
 
     if (user.id === post.message.authorId) {
@@ -63,7 +66,7 @@ export default (async (props) => {
             return writeErrorReply(response, ApiError.InvalidObject);
         }
 
-        const updateData = toPostUpdateInput(data, post);
+        const updateData = await toPostUpdateInput(data, post);
         if (!handleInputConversion(props, updateData)) return;
 
         const updatedPost = await prisma.post.update({
@@ -71,7 +74,10 @@ export default (async (props) => {
             data: updateData,
         });
 
-        return writeJsonReply(response, await createPostObject(updatedPost));
+        return writeJsonReply(
+            response,
+            await createPostObject(updatedPost, user),
+        );
     }
 
     writeErrorReply(response, ApiError.NoPermission);

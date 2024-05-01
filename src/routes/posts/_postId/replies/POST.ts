@@ -53,7 +53,7 @@ export default (async (props) => {
 
     writeJsonReply(
         response,
-        await createMessageObject(reply),
+        await createMessageObject(reply, user),
         HttpStatusCode.Created,
     );
 }) satisfies RouteHandler;

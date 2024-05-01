@@ -6,20 +6,22 @@ import { writeErrorReply, writeStatusReply } from '../replies/error.js';
 import { HttpStatusCode } from '../status.js';
 import { RouteHandlerProps } from './index.js';
 
-export const handleAuthorization = async ({
-    request,
-    response,
-}: RouteHandlerProps): Promise<User | undefined> => {
+export const handleAuthorization = async (
+    { request, response }: RouteHandlerProps,
+    required: boolean = true,
+): Promise<User | null> => {
     const auth = request.headers.authorization;
     if (!auth) {
-        return writeStatusReply(response, HttpStatusCode.Unauthorized);
+        if (required) writeStatusReply(response, HttpStatusCode.Unauthorized);
+        return null;
     }
 
     const match = auth.match(
         /(?<scheme>[!#$%&'*+\-.^_`|~0-9A-Za-z]+)(?:[ \t]+(?<param>[A-Za-z0-9-._~+/]+))?/,
     );
     if (!match) {
-        return writeErrorReply(response, ApiError.InvalidAuthorization);
+        if (required) writeErrorReply(response, ApiError.InvalidAuthorization);
+        return null;
     }
 
     if (match.groups!.scheme === 'Basic' && match.groups!.param) {
@@ -29,7 +31,9 @@ export const handleAuthorization = async ({
 
         const [name, password] = pair.split(':', 2);
         if (!name || !password) {
-            return writeErrorReply(response, ApiError.InvalidAuthorization);
+            if (required)
+                writeErrorReply(response, ApiError.InvalidAuthorization);
+            return null;
         }
 
         const user = await prisma.user.findFirst({
@@ -39,15 +43,18 @@ export const handleAuthorization = async ({
         });
 
         if (!user) {
-            return writeErrorReply(response, ApiError.InvalidUsername);
+            if (required) writeErrorReply(response, ApiError.InvalidUsername);
+            return null;
         }
 
         if (!(await compare(password, user.passwordHash))) {
-            return writeErrorReply(response, ApiError.InvalidPassword);
+            if (required) writeErrorReply(response, ApiError.InvalidPassword);
+            return null;
         }
 
         return user;
     }
 
-    return writeErrorReply(response, ApiError.InvalidAuthorization);
+    if (required) writeErrorReply(response, ApiError.InvalidAuthorization);
+    return null;
 };

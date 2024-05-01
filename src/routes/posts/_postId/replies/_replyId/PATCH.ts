@@ -69,7 +69,7 @@ export default (async (props) => {
 
         return writeJsonReply(
             response,
-            await createMessageObject(updatedReply),
+            await createMessageObject(updatedReply, user),
         );
     }
 
@@ -88,7 +88,7 @@ export default (async (props) => {
 
         return writeJsonReply(
             response,
-            await createMessageObject(updatedReply),
+            await createMessageObject(updatedReply, user),
         );
     }
 

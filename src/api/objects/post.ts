@@ -1,4 +1,4 @@
-import { Post } from '@prisma/client';
+import { Post, User } from '@prisma/client';
 import { prisma } from '../../env.js';
 import { MessageObject, createMessageObject } from './message.js';
 
@@ -12,13 +12,16 @@ export type PostObject = {
     readonly categoryId: number;
 };
 
-export async function createPostObject(post: Post): Promise<PostObject> {
+export async function createPostObject(
+    post: Post,
+    user: User | null,
+): Promise<PostObject> {
     const message = (await prisma.message.findFirst({
         where: { id: post.messageId },
     }))!;
 
     return {
-        message: await createMessageObject(message),
+        message: await createMessageObject(message, user),
         title: post.title,
         locked: post.locked,
         question: post.question,
@@ -28,6 +31,9 @@ export async function createPostObject(post: Post): Promise<PostObject> {
     };
 }
 
-export async function createPostsArray(posts: Post[]): Promise<PostObject[]> {
-    return Promise.all(posts.map((p) => createPostObject(p)));
+export async function createPostsArray(
+    posts: Post[],
+    user: User | null,
+): Promise<PostObject[]> {
+    return Promise.all(posts.map((p) => createPostObject(p, user)));
 }

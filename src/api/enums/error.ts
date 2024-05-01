@@ -6,6 +6,7 @@ export enum ApiError {
     UnknownCategory,
     UnknownPost,
     UnknownPostReply,
+    UnknownMessage,
 
     _Validations = 2000,
     InvalidObject,
@@ -17,6 +18,7 @@ export enum ApiError {
     InvalidPassword,
     InvalidCategoryName,
     InvalidPostTitle,
+    InvalidEmoji,
 
     _Limitations = 3000,
     NotStudentOrTeacher,

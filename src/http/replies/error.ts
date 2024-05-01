@@ -32,6 +32,7 @@ const apiErrorStatuses: {
     [ApiError.UnknownCategory]: HttpStatusCode.NotFound,
     [ApiError.UnknownPost]: HttpStatusCode.NotFound,
     [ApiError.UnknownPostReply]: HttpStatusCode.NotFound,
+    [ApiError.UnknownMessage]: HttpStatusCode.NotFound,
 
     [ApiError._Validations]: null,
     [ApiError.InvalidObject]: HttpStatusCode.BadRequest,
@@ -43,6 +44,7 @@ const apiErrorStatuses: {
     [ApiError.InvalidPassword]: HttpStatusCode.Unauthorized,
     [ApiError.InvalidCategoryName]: HttpStatusCode.BadRequest,
     [ApiError.InvalidPostTitle]: HttpStatusCode.BadRequest,
+    [ApiError.InvalidEmoji]: HttpStatusCode.BadRequest,
 
     [ApiError._Limitations]: null,
     [ApiError.NotStudentOrTeacher]: HttpStatusCode.BadRequest,
@@ -72,6 +74,7 @@ const apiErrorMessages: {
     [ApiError.UnknownCategory]: 'Unknown category',
     [ApiError.UnknownPost]: 'Unknown post',
     [ApiError.UnknownPostReply]: 'Unknown post reply',
+    [ApiError.UnknownMessage]: 'Unknown message',
 
     [ApiError._Validations]: null,
     [ApiError.InvalidObject]: 'Invalid object',
@@ -85,6 +88,7 @@ const apiErrorMessages: {
     [ApiError.InvalidPassword]: 'Invalid password',
     [ApiError.InvalidCategoryName]: 'Category names cannot contain newlines',
     [ApiError.InvalidPostTitle]: 'Post titles cannot contain newlines',
+    [ApiError.InvalidEmoji]: 'Invalid emoji',
 
     [ApiError._Limitations]: null,
     [ApiError.NotStudentOrTeacher]: 'User must be a student or teacher',

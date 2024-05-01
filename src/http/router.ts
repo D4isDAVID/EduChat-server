@@ -101,7 +101,7 @@ export async function loadRoutes(dirUrl: URL): Promise<Router> {
             return { handler: methods.get(method)!, params };
         }
 
-        const name = splitRoute.shift()!;
+        const name = decodeURI(splitRoute.shift()!);
         const subRoute = splitRoute.join('/');
 
         if (routers.has(name)) {

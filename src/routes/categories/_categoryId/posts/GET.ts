@@ -3,6 +3,7 @@ import { DefaultArgs } from '@prisma/client/runtime/library';
 import { ApiError } from '../../../../api/enums/error.js';
 import { createPostsArray } from '../../../../api/objects/post.js';
 import { prisma } from '../../../../env.js';
+import { handleAuthorization } from '../../../../http/handlers/authorization.js';
 import { RouteHandler } from '../../../../http/handlers/index.js';
 import {
     defaultValueParam,
@@ -18,6 +19,8 @@ export default (async (props) => {
         response,
         params: [rawId],
     } = props;
+
+    const user = await handleAuthorization(props, false);
 
     const { limit, after, before } = handleSearchParams(props, {
         limit: defaultValueParam(
@@ -60,5 +63,5 @@ export default (async (props) => {
 
     const posts = await prisma.post.findMany(findData);
 
-    writeJsonReply(response, await createPostsArray(posts));
+    writeJsonReply(response, await createPostsArray(posts, user));
 }) satisfies RouteHandler;
