@@ -6,10 +6,10 @@ import { writeErrorReply, writeStatusReply } from '../replies/error.js';
 import { HttpStatusCode } from '../status.js';
 import { RouteHandlerProps } from './index.js';
 
-export const handleAuthorization = async (
+export async function handleAuthorization(
     { request, response }: RouteHandlerProps,
     required: boolean = true,
-): Promise<User | null> => {
+): Promise<User | null> {
     const auth = request.headers.authorization;
     if (!auth) {
         if (required) writeStatusReply(response, HttpStatusCode.Unauthorized);
@@ -57,4 +57,4 @@ export const handleAuthorization = async (
 
     if (required) writeErrorReply(response, ApiError.InvalidAuthorization);
     return null;
-};
+}

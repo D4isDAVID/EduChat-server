@@ -1,9 +1,9 @@
 import { once } from 'node:events';
 import { RouteHandlerProps } from './index.js';
 
-export const handleData = async ({
+export async function handleData({
     request,
-}: RouteHandlerProps): Promise<string> => {
+}: RouteHandlerProps): Promise<string> {
     let data = '';
 
     request.on('data', (chunk) => {
@@ -12,4 +12,4 @@ export const handleData = async ({
 
     await once(request, 'end');
     return data;
-};
+}

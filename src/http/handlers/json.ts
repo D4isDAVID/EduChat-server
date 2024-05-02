@@ -4,9 +4,9 @@ import { HttpStatusCode } from '../status.js';
 import { handleData } from './data.js';
 import { RouteHandlerProps } from './index.js';
 
-export const handleJson = async (
+export async function handleJson(
     props: RouteHandlerProps,
-): Promise<JsonType | undefined> => {
+): Promise<JsonType | undefined> {
     const { request, response } = props;
 
     const data = await handleData(props);
@@ -21,4 +21,4 @@ export const handleJson = async (
     } catch {
         return writeStatusReply(response, HttpStatusCode.BadRequest);
     }
-};
+}
