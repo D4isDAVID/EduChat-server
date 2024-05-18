@@ -15,6 +15,7 @@ export type MessageObject = {
     readonly hidden: boolean;
     readonly reactions: ReactionCountObject[];
 
+    readonly parentId: number | null;
     readonly author: UserObject;
 };
 
@@ -37,6 +38,7 @@ export async function createMessageObject(
         hidden: message.hidden,
         reactions: await createReactionCountsArray(message, user),
 
+        parentId: message.parentId,
         author: await createUserObject(author),
     };
 }
