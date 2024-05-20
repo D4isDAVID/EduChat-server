@@ -2,13 +2,13 @@ import { Message, Post, Prisma } from '@prisma/client';
 import { ApiError } from '../enums/error.js';
 import { validatePostTitle } from '../validators/post-title.js';
 import {
-    MessageEditObject,
-    isMessageEditObject,
-    toMessageUpdateInput,
-} from './message-edit.js';
+    AdminMessageEditObject,
+    isAdminMessageEditObject,
+    toAdminMessageUpdateInput,
+} from './message-edit-admin.js';
 
 export type AdminPostEditObject = {
-    readonly message?: MessageEditObject;
+    readonly message?: AdminMessageEditObject;
     readonly title?: string;
     readonly locked?: boolean;
     readonly question?: boolean;
@@ -20,7 +20,7 @@ export function isAdminPostEditObject(
     return (
         obj !== null &&
         typeof obj === 'object' &&
-        (!('message' in obj) || isMessageEditObject(obj.message)) &&
+        (!('message' in obj) || isAdminMessageEditObject(obj.message)) &&
         (!('title' in obj) || typeof obj.title === 'string') &&
         (!('pinned' in obj) || typeof obj.pinned === 'boolean') &&
         (!('locked' in obj) || typeof obj.locked === 'boolean') &&
@@ -35,7 +35,10 @@ export function toAdminPostUpdateInput(
     const data: Prisma.PostUpdateInput = {};
 
     if ('message' in obj) {
-        const messageData = toMessageUpdateInput(obj.message, post.message);
+        const messageData = toAdminMessageUpdateInput(
+            obj.message,
+            post.message,
+        );
         if (typeof messageData === 'number') return messageData;
 
         if (messageData) data.message = { update: messageData };
