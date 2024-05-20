@@ -60,7 +60,6 @@ model Message {
   createdAt DateTime  @default(now())
   editedAt  DateTime?
   pinned    Boolean   @default(false)
-  hidden    Boolean   @default(false)
 
   post     Post?
   question Post? @relation("QuestionAnswer")

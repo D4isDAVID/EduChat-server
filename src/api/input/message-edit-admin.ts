@@ -4,7 +4,7 @@ import { validateMessageContent } from '../validators/message-content.js';
 
 export type AdminMessageEditObject = {
     readonly content?: string;
-    readonly hidden?: boolean;
+    readonly pinned?: boolean;
 };
 
 export function isAdminMessageEditObject(
@@ -14,7 +14,7 @@ export function isAdminMessageEditObject(
         obj !== null &&
         typeof obj === 'object' &&
         (!('content' in obj) || typeof obj.content === 'string') &&
-        (!('hidden' in obj) || typeof obj.hidden === 'boolean')
+        (!('pinned' in obj) || typeof obj.pinned === 'boolean')
     );
 }
 
@@ -31,8 +31,8 @@ export function toAdminMessageUpdateInput(
         data.content = obj.content;
     }
 
-    if ('hidden' in obj) {
-        data.hidden = obj.hidden;
+    if ('pinned' in obj && obj.pinned !== message.pinned) {
+        data.pinned = obj.pinned;
     }
 
     if (Object.keys(data).length === 0) {

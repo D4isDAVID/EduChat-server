@@ -12,7 +12,6 @@ export type MessageObject = {
     readonly createdAt: string;
     readonly editedAt: string | null;
     readonly pinned: boolean;
-    readonly hidden: boolean;
     readonly reactions: ReactionCountObject[];
 
     readonly parentId: number | null;
@@ -35,7 +34,6 @@ export async function createMessageObject(
             ? new Date(message.editedAt).toISOString()
             : null,
         pinned: message.pinned,
-        hidden: message.hidden,
         reactions: await createReactionCountsArray(message, user),
 
         parentId: message.parentId,
