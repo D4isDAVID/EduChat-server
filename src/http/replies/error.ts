@@ -40,7 +40,7 @@ const apiErrorStatuses: {
     [ApiError.BadEmailFormat]: HttpStatusCode.BadRequest,
     [ApiError.BadPasswordFormat]: HttpStatusCode.BadRequest,
     [ApiError.InvalidAuthorization]: HttpStatusCode.Unauthorized,
-    [ApiError.InvalidUsername]: HttpStatusCode.Unauthorized,
+    [ApiError.InvalidEmail]: HttpStatusCode.Unauthorized,
     [ApiError.InvalidPassword]: HttpStatusCode.Unauthorized,
     [ApiError.InvalidCategoryName]: HttpStatusCode.BadRequest,
     [ApiError.InvalidPostTitle]: HttpStatusCode.BadRequest,
@@ -84,7 +84,7 @@ const apiErrorMessages: {
     [ApiError.BadPasswordFormat]:
         'Password must contain a mix of numbers, letters and symbols.',
     [ApiError.InvalidAuthorization]: 'Invalid authorization',
-    [ApiError.InvalidUsername]: 'Invalid username',
+    [ApiError.InvalidEmail]: 'Invalid email',
     [ApiError.InvalidPassword]: 'Invalid password',
     [ApiError.InvalidCategoryName]: 'Category names cannot contain newlines',
     [ApiError.InvalidPostTitle]: 'Post titles cannot contain newlines',

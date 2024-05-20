@@ -14,7 +14,7 @@ export enum ApiError {
     BadEmailFormat,
     BadPasswordFormat,
     InvalidAuthorization,
-    InvalidUsername,
+    InvalidEmail,
     InvalidPassword,
     InvalidCategoryName,
     InvalidPostTitle,

@@ -29,21 +29,19 @@ export async function handleAuthorization(
             'utf8',
         );
 
-        const [name, password] = pair.split(':', 2);
-        if (!name || !password) {
+        const [email, password] = pair.split(':', 2);
+        if (!email || !password) {
             if (required)
                 writeErrorReply(response, ApiError.InvalidAuthorization);
             return null;
         }
 
         const user = await prisma.user.findFirst({
-            where: {
-                name,
-            },
+            where: { email },
         });
 
         if (!user) {
-            if (required) writeErrorReply(response, ApiError.InvalidUsername);
+            if (required) writeErrorReply(response, ApiError.InvalidEmail);
             return null;
         }
 
