@@ -44,7 +44,6 @@ const apiErrorStatuses: {
     [ApiError.InvalidPassword]: HttpStatusCode.Unauthorized,
     [ApiError.InvalidCategoryName]: HttpStatusCode.BadRequest,
     [ApiError.InvalidPostTitle]: HttpStatusCode.BadRequest,
-    [ApiError.InvalidEmoji]: HttpStatusCode.BadRequest,
 
     [ApiError._Limitations]: null,
     [ApiError.NotStudentOrTeacher]: HttpStatusCode.BadRequest,
@@ -88,7 +87,6 @@ const apiErrorMessages: {
     [ApiError.InvalidPassword]: 'Invalid password',
     [ApiError.InvalidCategoryName]: 'Category names cannot contain newlines',
     [ApiError.InvalidPostTitle]: 'Post titles cannot contain newlines',
-    [ApiError.InvalidEmoji]: 'Invalid emoji',
 
     [ApiError._Limitations]: null,
     [ApiError.NotStudentOrTeacher]: 'User must be a student or teacher',

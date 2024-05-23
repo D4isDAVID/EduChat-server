@@ -1,21 +1,15 @@
-import { ApiError } from '../../../../../../api/enums/error.js';
-import { validateEmoji } from '../../../../../../api/validators/emoji.js';
-import { prisma } from '../../../../../../env.js';
-import { handleAuthorization } from '../../../../../../http/handlers/authorization.js';
-import { RouteHandler } from '../../../../../../http/handlers/index.js';
-import { writeEmptyReply } from '../../../../../../http/replies/empty.js';
-import { writeErrorReply } from '../../../../../../http/replies/error.js';
+import { ApiError } from '../../../../../api/enums/error.js';
+import { prisma } from '../../../../../env.js';
+import { handleAuthorization } from '../../../../../http/handlers/authorization.js';
+import { RouteHandler } from '../../../../../http/handlers/index.js';
+import { writeEmptyReply } from '../../../../../http/replies/empty.js';
+import { writeErrorReply } from '../../../../../http/replies/error.js';
 
 export default (async (props) => {
     const {
         response,
-        params: [rawId, emoji, rawUserId],
+        params: [rawId, rawUserId],
     } = props;
-
-    const emojiError = validateEmoji(emoji!);
-    if (typeof emojiError !== 'undefined') {
-        return writeErrorReply(response, emojiError);
-    }
 
     const user = await handleAuthorization(props);
     if (!user) return;
@@ -50,11 +44,10 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.UnknownUser);
     }
 
-    await prisma.reaction.delete({
+    await prisma.messageVote.delete({
         where: {
-            messageId_emoji_userId: {
+            messageId_userId: {
                 messageId,
-                emoji: emoji!,
                 userId,
             },
         },

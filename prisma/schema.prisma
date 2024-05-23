@@ -22,8 +22,8 @@ model User {
   blockers  User[] @relation("UserBlocks")
   blocking  User[] @relation("UserBlocks")
 
-  messages  Message[]
-  reactions Reaction[]
+  messages Message[]
+  votes    MessageVote[]
 }
 
 model Category {
@@ -71,16 +71,16 @@ model Message {
   authorId Int
   author   User @relation(fields: [authorId], references: [id])
 
-  reactions Reaction[]
+  votes MessageVote[]
 }
 
-model Reaction {
+model MessageVote {
   messageId Int
   message   Message  @relation(fields: [messageId], references: [id])
-  emoji     String
   userId    Int
   user      User     @relation(fields: [userId], references: [id])
+  positive  Boolean
   createdAt DateTime @default(now())
 
-  @@id([messageId, emoji, userId])
+  @@id([messageId, userId])
 }

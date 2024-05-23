@@ -1,9 +1,9 @@
 import { Message, User } from '@prisma/client';
 import { prisma } from '../../env.js';
 import {
-    ReactionCountObject,
-    createReactionCountsArray,
-} from './reaction-count.js';
+    MessageVoteCountObject,
+    createMessageVoteCountObject,
+} from './message-vote-count.js';
 import { UserObject, createUserObject } from './user.js';
 
 export type MessageObject = {
@@ -12,7 +12,7 @@ export type MessageObject = {
     readonly createdAt: string;
     readonly editedAt: string | null;
     readonly pinned: boolean;
-    readonly reactions: ReactionCountObject[];
+    readonly votes: MessageVoteCountObject;
 
     readonly parentId: number | null;
     readonly author: UserObject;
@@ -34,7 +34,7 @@ export async function createMessageObject(
             ? new Date(message.editedAt).toISOString()
             : null,
         pinned: message.pinned,
-        reactions: await createReactionCountsArray(message, user),
+        votes: await createMessageVoteCountObject(message, user),
 
         parentId: message.parentId,
         author: await createUserObject(author),

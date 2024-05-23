@@ -31,7 +31,7 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.UnknownMessage);
     }
 
-    await prisma.reaction.deleteMany({ where: { messageId: message.id } });
+    await prisma.messageVote.deleteMany({ where: { messageId: message.id } });
 
     writeEmptyReply(response);
 }) satisfies RouteHandler;
