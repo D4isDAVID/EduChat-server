@@ -26,28 +26,22 @@ export function toCategoryCreateInput(
     obj: CategoryCreateObject,
 ): Prisma.CategoryCreateInput | ApiError {
     const nameError = validateCategoryName(obj.name);
-    if (nameError) {
-        return nameError;
-    }
+    if (nameError) return nameError;
 
-    const input: Prisma.CategoryCreateInput = {
+    const data: Prisma.CategoryCreateInput = {
         name: obj.name,
     };
 
     if ('description' in obj) {
         const descriptionError = validateCategoryDescription(obj.description);
-        if (descriptionError) {
-            return descriptionError;
-        }
+        if (descriptionError) return descriptionError;
 
-        input.description = obj.description;
+        data.description = obj.description;
     }
 
     if ('parentId' in obj) {
-        input.parent = {
-            connect: { id: obj.parentId },
-        };
+        data.parent = { connect: { id: obj.parentId } };
     }
 
-    return input;
+    return data;
 }

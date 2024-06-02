@@ -21,6 +21,5 @@ export function toAdminPostReplyUpdateInput(
     obj: AdminPostReplyEditObject,
     message: Message,
 ): Prisma.MessageUpdateInput | ApiError | false {
-    const data = toAdminMessageUpdateInput(obj, message);
-    return data;
+    return toAdminMessageUpdateInput(obj, message);
 }

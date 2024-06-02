@@ -1,8 +1,8 @@
 import { ApiError } from '../../../../api/enums/error.js';
 import {
-    isUserEditObject,
-    toUserUpdateInput,
-} from '../../../../api/input/user-edit.js';
+    isSelfUserEditObject,
+    toSelfUserUpdateInput,
+} from '../../../../api/input/user-edit-self.js';
 import { createUserObject } from '../../../../api/objects/user.js';
 import { prisma } from '../../../../env.js';
 import { handleAuthorization } from '../../../../http/handlers/authorization.js';
@@ -21,11 +21,11 @@ export default (async (props) => {
     const data = await handleJson(props);
     if (!data) return;
 
-    if (!isUserEditObject(data)) {
+    if (!isSelfUserEditObject(data)) {
         return writeErrorReply(response, ApiError.InvalidObject);
     }
 
-    const updateData = await toUserUpdateInput(data, user);
+    const updateData = await toSelfUserUpdateInput(data, user);
     if (!handleInputConversion(props, updateData)) return;
 
     const updatedUser = await prisma.user.update({

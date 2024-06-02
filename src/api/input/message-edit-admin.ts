@@ -1,9 +1,13 @@
 import { Message, Prisma } from '@prisma/client';
 import { ApiError } from '../enums/error.js';
-import { validateMessageContent } from '../validators/message-content.js';
+import { supersede } from '../utils/supersede-input.js';
+import {
+    MessageEditObject,
+    isMessageEditObject,
+    toMessageUpdateInput,
+} from './message-edit.js';
 
-export type AdminMessageEditObject = {
-    readonly content?: string;
+export type AdminMessageEditObject = MessageEditObject & {
     readonly pinned?: boolean;
 };
 
@@ -11,9 +15,7 @@ export function isAdminMessageEditObject(
     obj: unknown,
 ): obj is AdminMessageEditObject {
     return (
-        obj !== null &&
-        typeof obj === 'object' &&
-        (!('content' in obj) || typeof obj.content === 'string') &&
+        isMessageEditObject(obj) &&
         (!('pinned' in obj) || typeof obj.pinned === 'boolean')
     );
 }
@@ -22,14 +24,8 @@ export function toAdminMessageUpdateInput(
     obj: AdminMessageEditObject,
     message: Message,
 ): Prisma.MessageUpdateInput | ApiError | false {
-    const data: Prisma.MessageUpdateInput = {};
-
-    if ('content' in obj && obj.content !== message.content) {
-        const messageContentError = validateMessageContent(obj.content);
-        if (messageContentError) return messageContentError;
-
-        data.content = obj.content;
-    }
+    const data = supersede(toMessageUpdateInput(obj, message), {});
+    if (typeof data !== 'object') return data;
 
     if ('pinned' in obj && obj.pinned !== message.pinned) {
         data.pinned = obj.pinned;

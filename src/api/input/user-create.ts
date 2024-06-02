@@ -36,24 +36,16 @@ export async function toUserCreateInput(
         name: obj.name,
         email: obj.email,
     });
-    if (typeof error === 'number') {
-        return error;
-    }
+    if (typeof error === 'number') return error;
 
     const usernameError = validateUsername(obj.name);
-    if (usernameError) {
-        return usernameError;
-    }
+    if (usernameError) return usernameError;
 
     const emailError = validateEmail(obj.email);
-    if (emailError) {
-        return emailError;
-    }
+    if (emailError) return emailError;
 
     const passwordError = validatePassword(obj.password);
-    if (passwordError) {
-        return passwordError;
-    }
+    if (passwordError) return passwordError;
 
     if (!obj.student && !obj.teacher) {
         return ApiError.NotStudentOrTeacher;

@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client';
 import { ApiError } from '../../../../../../api/enums/error.js';
 import {
     isAdminPostReplyEditObject,
@@ -54,43 +55,41 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.UnknownPostReply);
     }
 
+    let updateData: Prisma.MessageUpdateInput | null = null;
+
     if (user.admin) {
         if (!isAdminPostReplyEditObject(data)) {
             return writeErrorReply(response, ApiError.InvalidObject);
         }
 
-        const updateData = toAdminPostReplyUpdateInput(data, reply);
-        if (!handleInputConversion(props, updateData)) return;
+        const newData = toAdminPostReplyUpdateInput(data, reply);
+        if (!handleInputConversion(props, newData)) return;
 
-        const updatedReply = await prisma.message.update({
-            where: { id: reply.id },
-            data: updateData,
-        });
-
-        return writeJsonReply(
-            response,
-            await createMessageObject(updatedReply, user),
-        );
+        updateData = newData;
     }
 
-    if (reply.authorId === user.id) {
+    if (!updateData && reply.authorId === user.id) {
         if (!isPostReplyEditObject(data)) {
             return writeErrorReply(response, ApiError.InvalidObject);
         }
 
-        const updateData = toPostReplyUpdateInput(data, reply);
-        if (!handleInputConversion(props, updateData)) return;
+        const newData = toPostReplyUpdateInput(data, reply);
+        if (!handleInputConversion(props, newData)) return;
 
-        const updatedReply = await prisma.message.update({
-            where: { id: reply.id },
-            data: updateData,
-        });
-
-        return writeJsonReply(
-            response,
-            await createMessageObject(updatedReply, user),
-        );
+        updateData = newData;
     }
 
-    writeErrorReply(response, ApiError.NoPermission);
+    if (!updateData) {
+        return writeErrorReply(response, ApiError.NoPermission);
+    }
+
+    const updatedReply = await prisma.message.update({
+        where: { id: reply.id },
+        data: updateData,
+    });
+
+    return writeJsonReply(
+        response,
+        await createMessageObject(updatedReply, user),
+    );
 }) satisfies RouteHandler;

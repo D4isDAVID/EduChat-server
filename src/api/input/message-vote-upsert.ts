@@ -33,9 +33,7 @@ export function toMessageVoteUpsertInput(
                 userId: user.id,
             },
         },
-        update: {
-            positive: obj.positive,
-        },
+        update: { positive: obj.positive },
     };
 
     return data;

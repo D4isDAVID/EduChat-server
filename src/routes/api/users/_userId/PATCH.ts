@@ -1,8 +1,8 @@
 import { ApiError } from '../../../../api/enums/error.js';
 import {
-    isAdminUserEditObject,
-    toAdminUserUpdateInput,
-} from '../../../../api/input/user-edit-admin.js';
+    isUserEditObject,
+    toUserUpdateInput,
+} from '../../../../api/input/user-edit.js';
 import { createUserObject } from '../../../../api/objects/user.js';
 import { prisma } from '../../../../env.js';
 import { handleAuthorization } from '../../../../http/handlers/authorization.js';
@@ -28,7 +28,7 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.NoPermission);
     }
 
-    if (!isAdminUserEditObject(data)) {
+    if (!isUserEditObject(data)) {
         return writeErrorReply(response, ApiError.InvalidObject);
     }
 
@@ -45,7 +45,7 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.UnknownUser);
     }
 
-    const updateData = toAdminUserUpdateInput(data, user);
+    const updateData = toUserUpdateInput(data, user);
     if (!handleInputConversion(props, updateData)) return;
 
     const updatedUser = await prisma.user.update({

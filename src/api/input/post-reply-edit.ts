@@ -18,6 +18,5 @@ export function toPostReplyUpdateInput(
     obj: PostReplyEditObject,
     message: Message,
 ): Prisma.MessageUpdateInput | ApiError | false {
-    const data = toMessageUpdateInput(obj, message);
-    return data;
+    return toMessageUpdateInput(obj, message);
 }

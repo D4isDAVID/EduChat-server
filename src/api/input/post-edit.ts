@@ -20,7 +20,11 @@ export function isPostEditObject(obj: unknown): obj is PostEditObject {
         obj !== null &&
         typeof obj === 'object' &&
         (!('message' in obj) || isMessageEditObject(obj.message)) &&
-        (!('title' in obj) || typeof obj.title === 'string')
+        (!('title' in obj) || typeof obj.title === 'string') &&
+        (!('question' in obj) || typeof obj.question === 'boolean') &&
+        (!('answerId' in obj) ||
+            typeof obj.answerId === 'number' ||
+            obj.answerId === null)
     );
 }
 
@@ -50,7 +54,7 @@ export async function toPostUpdateInput(
 
     if ('answerId' in obj && obj.answerId !== post.answerId) {
         if (obj.answerId === null) {
-            data.answer = { delete: true };
+            data.answer = { disconnect: true };
         } else {
             const reply = await prisma.message.findFirst({
                 where: { id: obj.answerId, parentId: post.messageId },

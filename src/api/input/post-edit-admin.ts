@@ -1,38 +1,38 @@
 import { Message, Post, Prisma } from '@prisma/client';
 import { ApiError } from '../enums/error.js';
-import { validatePostTitle } from '../validators/post-title.js';
+import { supersede } from '../utils/supersede-input.js';
 import {
     AdminMessageEditObject,
     isAdminMessageEditObject,
     toAdminMessageUpdateInput,
 } from './message-edit-admin.js';
+import {
+    PostEditObject,
+    isPostEditObject,
+    toPostUpdateInput,
+} from './post-edit.js';
 
-export type AdminPostEditObject = {
+export type AdminPostEditObject = PostEditObject & {
     readonly message?: AdminMessageEditObject;
-    readonly title?: string;
     readonly locked?: boolean;
-    readonly question?: boolean;
 };
 
 export function isAdminPostEditObject(
     obj: unknown,
 ): obj is AdminPostEditObject {
     return (
-        obj !== null &&
-        typeof obj === 'object' &&
+        isPostEditObject(obj) &&
         (!('message' in obj) || isAdminMessageEditObject(obj.message)) &&
-        (!('title' in obj) || typeof obj.title === 'string') &&
-        (!('pinned' in obj) || typeof obj.pinned === 'boolean') &&
-        (!('locked' in obj) || typeof obj.locked === 'boolean') &&
-        (!('question' in obj) || typeof obj.question === 'boolean')
+        (!('locked' in obj) || typeof obj.locked === 'boolean')
     );
 }
 
-export function toAdminPostUpdateInput(
+export async function toAdminPostUpdateInput(
     obj: AdminPostEditObject,
     post: Post & { message: Message },
-): Prisma.PostUpdateInput | ApiError | false {
-    const data: Prisma.PostUpdateInput = {};
+): Promise<Prisma.PostUpdateInput | ApiError | false> {
+    const data = supersede(await toPostUpdateInput(obj, post), {});
+    if (typeof data !== 'object') return data;
 
     if ('message' in obj) {
         const messageData = toAdminMessageUpdateInput(
@@ -44,19 +44,8 @@ export function toAdminPostUpdateInput(
         if (messageData) data.message = { update: messageData };
     }
 
-    if ('title' in obj && obj.title !== post.title) {
-        const titleError = validatePostTitle(obj.title);
-        if (titleError) return titleError;
-
-        data.title = obj.title;
-    }
-
     if ('locked' in obj && obj.locked !== post.locked) {
         data.locked = obj.locked;
-    }
-
-    if ('question' in obj && obj.question !== post.question) {
-        data.question = obj.question;
     }
 
     if (Object.keys(data).length === 0) {

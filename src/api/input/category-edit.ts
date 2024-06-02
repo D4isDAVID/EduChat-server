@@ -33,9 +33,7 @@ export function toCategoryUpdateInput(
 
     if ('name' in obj && obj.name !== category.name) {
         const nameError = validateCategoryName(obj.name);
-        if (nameError) {
-            return nameError;
-        }
+        if (nameError) return nameError;
 
         data.name = obj.name;
     }
@@ -45,9 +43,7 @@ export function toCategoryUpdateInput(
             const descriptionError = validateCategoryDescription(
                 obj.description,
             );
-            if (descriptionError) {
-                return descriptionError;
-            }
+            if (descriptionError) return descriptionError;
         }
 
         data.description = obj.description;
@@ -66,9 +62,7 @@ export function toCategoryUpdateInput(
         obj.parentId !== category.parentId &&
         obj.parentId !== category.id
     ) {
-        data.parent = {
-            connect: { id: obj.parentId },
-        };
+        data.parent = { connect: { id: obj.parentId } };
     }
 
     if (Object.keys(data).length === 0) {
