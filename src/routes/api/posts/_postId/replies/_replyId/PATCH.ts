@@ -47,7 +47,7 @@ export default (async (props) => {
     }
 
     const reply = await prisma.message.findFirst({
-        where: { parentId: postId },
+        where: { id: replyId, parentId: postId },
     });
 
     if (!reply) {
