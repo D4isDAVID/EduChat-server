@@ -14,6 +14,7 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
   admin        Boolean  @default(false)
+  helper       Boolean  @default(false)
   student      Boolean  @default(false)
   teacher      Boolean  @default(false)
 

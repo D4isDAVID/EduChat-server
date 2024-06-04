@@ -5,6 +5,7 @@ export type UserObject = {
     readonly name: string;
     readonly createdAt: string;
     readonly admin: boolean;
+    readonly helper: boolean;
     readonly student: boolean;
     readonly teacher: boolean;
 };
@@ -15,6 +16,7 @@ export async function createUserObject(user: User): Promise<UserObject> {
         name: user.name,
         createdAt: new Date(user.createdAt).toISOString(),
         admin: user.admin,
+        helper: user.helper,
         student: user.student,
         teacher: user.teacher,
     };

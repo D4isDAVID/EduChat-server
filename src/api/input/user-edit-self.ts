@@ -2,24 +2,22 @@ import { Prisma, User } from '@prisma/client';
 import { compare } from 'bcrypt';
 import { ApiError } from '../enums/error.js';
 import { hashPassword } from '../utils/hash-password.js';
-import { supersede } from '../utils/supersede-input.js';
 import { checkUsernameAndEmailAvailability } from '../utils/username-email-availability.js';
 import { validateEmail } from '../validators/email.js';
 import { validatePassword } from '../validators/password.js';
-import {
-    UserEditObject,
-    isUserEditObject,
-    toUserUpdateInput,
-} from './user-edit.js';
+import { validateUsername } from '../validators/username.js';
 
-export type SelfUserEditObject = UserEditObject & {
+export type SelfUserEditObject = {
+    readonly name?: string;
     readonly email?: string;
     readonly password?: string;
 };
 
-export function isSelfUserEditObject(obj: unknown): obj is UserEditObject {
+export function isSelfUserEditObject(obj: unknown): obj is SelfUserEditObject {
     return (
-        isUserEditObject(obj) &&
+        obj !== null &&
+        typeof obj === 'object' &&
+        (!('name' in obj) || typeof obj.name === 'string') &&
         (!('email' in obj) || typeof obj.email === 'string') &&
         (!('password' in obj) || typeof obj.password === 'string')
     );
@@ -29,14 +27,21 @@ export async function toSelfUserUpdateInput(
     obj: SelfUserEditObject,
     user: User,
 ): Promise<Prisma.UserUpdateInput | ApiError | false> {
-    const data = supersede(await toUserUpdateInput(obj, user), {});
-    if (typeof data !== 'object') return data;
+    const data: Prisma.UserUpdateInput = {};
 
     const error = await checkUsernameAndEmailAvailability({
+        name: obj.name,
         email: obj.email,
         user,
     });
     if (typeof error === 'number') return error;
+
+    if ('name' in obj && obj.name !== user.name) {
+        const usernameError = validateUsername(obj.name);
+        if (usernameError) return usernameError;
+
+        data.name = obj.name;
+    }
 
     if ('email' in obj && obj.email !== user.email) {
         const emailError = validateEmail(obj.email);
