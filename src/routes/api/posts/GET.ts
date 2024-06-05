@@ -40,7 +40,7 @@ export default (async (props) => {
 
     if (title) {
         if (!findData.where) findData.where = {};
-        findData.where!.title = title;
+        findData.where!.title = { startsWith: title };
     }
 
     if (typeof categoryId !== 'undefined') {
