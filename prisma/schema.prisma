@@ -35,7 +35,7 @@ model Category {
   locked      Boolean @default(false)
 
   parentId Int?
-  parent   Category?  @relation("ParentChildren", fields: [parentId], references: [id])
+  parent   Category?  @relation("ParentChildren", fields: [parentId], references: [id], onDelete: Cascade)
   children Category[] @relation("ParentChildren")
 
   posts Post[]
@@ -52,7 +52,7 @@ model Post {
   answer   Message? @relation("QuestionAnswer", fields: [answerId], references: [id])
 
   categoryId Int
-  category   Category @relation(fields: [categoryId], references: [id])
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
 }
 
 model Message {
@@ -66,7 +66,7 @@ model Message {
   question Post? @relation("QuestionAnswer")
 
   parentId Int?
-  parent   Message?  @relation("ParentReplies", fields: [parentId], references: [id])
+  parent   Message?  @relation("ParentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   replies  Message[] @relation("ParentReplies")
 
   authorId Int
