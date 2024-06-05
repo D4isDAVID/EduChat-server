@@ -16,6 +16,10 @@ export function handleSearchParams<T extends Record<string, unknown>>(
     }, {} as T);
 }
 
+export function stringParam(param: string): string {
+    return param;
+}
+
 export function intParam(param: string): number | undefined {
     const num = parseInt(param);
     if (!isNaN(num)) return num;
