@@ -1,4 +1,5 @@
 import { ApiError } from '../../../../api/enums/error.js';
+import { NotificationType } from '../../../../api/enums/notification-type.js';
 import {
     isAdminUserEditObject,
     toAdminUserUpdateInput,
@@ -45,13 +46,45 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.UnknownUser);
     }
 
-    const updateData = await toAdminUserUpdateInput(data, user);
+    const updateData = await toAdminUserUpdateInput(data, target);
     if (!handleInputConversion(props, updateData)) return;
 
     const updatedUser = await prisma.user.update({
         where: { id: target.id },
         data: updateData,
     });
+
+    if (
+        'admin' in updateData &&
+        user.id !== target.id &&
+        updateData.admin !== target.admin
+    ) {
+        await prisma.notification.create({
+            data: {
+                type: updateData.admin
+                    ? NotificationType.AdminGranted
+                    : NotificationType.AdminRevoked,
+                target: { connect: { id: target.id } },
+                user: { connect: { id: user.id } },
+            },
+        });
+    }
+
+    if (
+        'helper' in updateData &&
+        user.id !== target.id &&
+        updateData.helper !== target.helper
+    ) {
+        await prisma.notification.create({
+            data: {
+                type: updateData.helper
+                    ? NotificationType.HelperGranted
+                    : NotificationType.HelperRevoked,
+                target: { connect: { id: target.id } },
+                user: { connect: { id: user.id } },
+            },
+        });
+    }
 
     return writeJsonReply(response, await createUserObject(updatedUser));
 }) satisfies RouteHandler;

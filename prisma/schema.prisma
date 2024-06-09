@@ -23,8 +23,11 @@ model User {
   blockers  User[] @relation("UserBlocks")
   blocking  User[] @relation("UserBlocks")
 
-  messages Message[]
-  votes    MessageVote[]
+  messages          Message[]
+  votes             MessageVote[]
+  sentNotifications Notification[]
+
+  notifications Notification[] @relation("SourceUser")
 }
 
 model Category {
@@ -53,6 +56,8 @@ model Post {
 
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  notifications Notification[] @relation("SourcePost")
 }
 
 model Message {
@@ -73,6 +78,8 @@ model Message {
   author   User @relation(fields: [authorId], references: [id])
 
   votes MessageVote[]
+
+  notifications Notification[] @relation("SourceMessage")
 }
 
 model MessageVote {
@@ -83,5 +90,28 @@ model MessageVote {
   positive  Boolean
   createdAt DateTime @default(now())
 
+  notifications Notification[] @relation("SourceMessageVote")
+
   @@id([messageId, userId])
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  type      Int
+  createdAt DateTime @default(now())
+  read      Boolean  @default(false)
+  sent      Boolean  @default(false)
+
+  targetId Int
+  target   User @relation(fields: [targetId], references: [id], onDelete: Cascade)
+
+  userId        Int?
+  user          User?        @relation("SourceUser", fields: [userId], references: [id], onDelete: Cascade)
+  postId        Int?
+  post          Post?        @relation("SourcePost", fields: [postId], references: [messageId], onDelete: Cascade)
+  messageId     Int?
+  message       Message?     @relation("SourceMessage", fields: [messageId], references: [id], onDelete: Cascade)
+  voteUserId    Int?
+  voteMessageId Int?
+  messageVote   MessageVote? @relation("SourceMessageVote", fields: [voteMessageId, voteUserId], references: [messageId, userId], onDelete: Cascade)
 }

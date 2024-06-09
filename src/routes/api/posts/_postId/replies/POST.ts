@@ -1,4 +1,5 @@
 import { ApiError } from '../../../../../api/enums/error.js';
+import { NotificationType } from '../../../../../api/enums/notification-type.js';
 import {
     isPostReplyCreateObject,
     toPostReplyCreateInput,
@@ -36,6 +37,7 @@ export default (async (props) => {
 
     const post = await prisma.post.findFirst({
         where: { messageId: postId },
+        include: { message: true },
     });
 
     if (!post) {
@@ -50,6 +52,18 @@ export default (async (props) => {
     if (!handleInputConversion(props, createData)) return;
 
     const reply = await prisma.message.create({ data: createData });
+
+    if (user.id !== post.message.authorId) {
+        await prisma.notification.create({
+            data: {
+                type: NotificationType.NewPostReply,
+                target: { connect: { id: post.message.authorId } },
+                user: { connect: { id: user.id } },
+                post: { connect: { messageId: post.messageId } },
+                message: { connect: { id: reply.id } },
+            },
+        });
+    }
 
     writeJsonReply(
         response,

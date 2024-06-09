@@ -33,6 +33,7 @@ const apiErrorStatuses: {
     [ApiError.UnknownPost]: HttpStatusCode.NotFound,
     [ApiError.UnknownPostReply]: HttpStatusCode.NotFound,
     [ApiError.UnknownMessage]: HttpStatusCode.NotFound,
+    [ApiError.UnknownNotification]: HttpStatusCode.NotFound,
 
     [ApiError._Validations]: null,
     [ApiError.InvalidObject]: HttpStatusCode.BadRequest,
@@ -74,6 +75,7 @@ const apiErrorMessages: {
     [ApiError.UnknownPost]: 'Unknown post',
     [ApiError.UnknownPostReply]: 'Unknown post reply',
     [ApiError.UnknownMessage]: 'Unknown message',
+    [ApiError.UnknownNotification]: 'Unknown notification',
 
     [ApiError._Validations]: null,
     [ApiError.InvalidObject]: 'Invalid object',

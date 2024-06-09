@@ -7,6 +7,7 @@ export enum ApiError {
     UnknownPost,
     UnknownPostReply,
     UnknownMessage,
+    UnknownNotification,
 
     _Validations = 2000,
     InvalidObject,

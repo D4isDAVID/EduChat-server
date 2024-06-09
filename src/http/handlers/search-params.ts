@@ -25,6 +25,11 @@ export function intParam(param: string): number | undefined {
     if (!isNaN(num)) return num;
 }
 
+export function booleanParam(param: string): boolean | undefined {
+    const num = intParam(param);
+    if (typeof num !== 'undefined') return num !== 0;
+}
+
 export function filterParam<T>(
     func: ParamFunc<T>,
     filter: (param: NonNullable<T>) => boolean,

@@ -1,6 +1,7 @@
 import { User } from '@prisma/client';
 import { compare } from 'bcrypt';
 import { ApiError } from '../../api/enums/error.js';
+import { expireOldNotifications } from '../../api/utils/expire-old-notifications.js';
 import { prisma } from '../../env.js';
 import { writeErrorReply, writeStatusReply } from '../replies/error.js';
 import { HttpStatusCode } from '../status.js';
@@ -50,6 +51,7 @@ export async function handleAuthorization(
             return null;
         }
 
+        await expireOldNotifications(user);
         return user;
     }
 

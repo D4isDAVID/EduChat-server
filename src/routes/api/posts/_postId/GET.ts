@@ -27,5 +27,12 @@ export default (async (props) => {
         return writeErrorReply(response, ApiError.UnknownPost);
     }
 
+    if (user) {
+        await prisma.notification.updateMany({
+            where: { targetId: user.id, postId },
+            data: { read: true },
+        });
+    }
+
     writeJsonReply(response, await createPostObject(post, user));
 }) satisfies RouteHandler;
