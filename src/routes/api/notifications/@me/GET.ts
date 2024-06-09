@@ -36,10 +36,12 @@ export default (async (props) => {
 
     const notifications = await prisma.notification.findMany(findData);
 
-    await prisma.notification.updateMany({
-        where: { userId: user.id },
-        data: { sent: true },
-    });
+    if (onlyNew) {
+        await prisma.notification.updateMany({
+            where: { targetId: user.id },
+            data: { sent: true },
+        });
+    }
 
     const objects = await createNotificationsArray(notifications, user);
 

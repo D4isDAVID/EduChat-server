@@ -83,13 +83,13 @@ export async function createNotificationObject(
     }
 
     if (messageVoteNotifications.includes(notification.type)) {
-        if (!notification.userId || !notification.messageId)
+        if (!notification.voteUserId || !notification.voteMessageId)
             return deleteThis();
 
         const messageVote = await prisma.messageVote.findFirst({
             where: {
-                messageId: notification.messageId,
-                userId: notification.userId,
+                messageId: notification.voteMessageId,
+                userId: notification.voteUserId,
             },
         });
 
